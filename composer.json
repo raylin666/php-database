@@ -18,7 +18,8 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": ">=7.0"
+        "php": ">=7.0",
+        "shugachara/core-sdk": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "~6.0"
@@ -37,6 +38,9 @@
         }
     },
     "repositories": {
-
+        "shugachara-core-sdk": {
+            "type": "git",
+            "url": "git@github.com:shugachara/core-sdk.git"
+        }
     }
 }

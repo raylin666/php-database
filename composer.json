@@ -18,7 +18,7 @@
     ],
     "require": {
         "php": ">=7.0",
-        "shugachara/core-sdk": "^1.0.0"
+        "shugachara/core-sdk": "v1.0.*"
     },
     "require-dev": {
         "phpunit/phpunit": "~6.0"

@@ -37,10 +37,10 @@
             "ShugaChara\\Tests\\": "tests/"
         }
     },
-    "repositories": {
-        "shugachara-core-sdk": {
+    "repositories": [
+        {
             "type": "git",
             "url": "git@github.com:shugachara/core-sdk.git"
         }
-    }
+    ]
 }

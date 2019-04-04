@@ -16,6 +16,7 @@
             "email": "1099013371@qq.com"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
         "php": ">=7.0",
         "shugachara/core-sdk": "1.0.x-dev"

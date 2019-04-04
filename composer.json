@@ -39,7 +39,7 @@
     },
     "repositories": [
         {
-            "type": "git",
+            "type": "vcs",
             "url": "git@github.com:shugachara/core-sdk.git"
         }
     ]

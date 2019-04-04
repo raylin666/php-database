@@ -19,7 +19,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.0",
-        "shugachara/core-sdk": "dev-master"
+        "shugachara/core-sdk": "master"
     },
     "require-dev": {
         "phpunit/phpunit": "~6.0"

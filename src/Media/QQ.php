@@ -20,20 +20,24 @@ namespace ShugaChara\MusicSDK\Media;
 class QQ
 {
 
+    const CY_QQ_DOMAIN = 'c.y.qq.com';
+
+    const CY_QQ_HOST = 'https://' . self::CY_QQ_DOMAIN . '/';
+
     /**
      * 获取歌手
      */
-    const URL_GETSINGER = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg';
+    const URL_GETSINGER = self::CY_QQ_HOST . 'v8/fcg-bin/v8.fcg';
 
     /**
      * 获取歌手详情
      */
-    const URL_GETSINGERINFO = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_singer_desc.fcg';
+    const URL_GETSINGERINFO = self::CY_QQ_HOST . 'splcloud/fcgi-bin/fcg_get_singer_desc.fcg';
 
     /**
      * 获取歌手专辑
      */
-    const URL_GETSINGERALBUM = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_album.fcg';
+    const URL_GETSINGERALBUM = self::CY_QQ_HOST . 'v8/fcg-bin/fcg_v8_singer_album.fcg';
 
     /**
      * 获取歌手头像
@@ -43,17 +47,17 @@ class QQ
     /**
      * 获取专辑歌曲
      */
-    const URL_GETALBUMMUSIC = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg';
+    const URL_GETALBUMMUSIC = self::CY_QQ_HOST . 'v8/fcg-bin/fcg_v8_album_info_cp.fcg';
 
     /**
      * 获取歌手歌曲
      */
-    const URL_GETSINGERMUSIC = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg';
+    const URL_GETSINGERMUSIC = self::CY_QQ_HOST . 'v8/fcg-bin/fcg_v8_singer_track_cp.fcg';
 
     /**
      * 获取专辑
      */
-    const URL_GETALBUM = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg';
+    const URL_GETALBUM = self::CY_QQ_HOST . 'v8/fcg-bin/fcg_v8_album_info_cp.fcg';
 
     /**
      * 获取歌曲播放地址
@@ -63,17 +67,17 @@ class QQ
     /**
      * 获取歌曲歌词
      */
-    const URL_GETMUSICLYRIC = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg';
+    const URL_GETMUSICLYRIC = self::CY_QQ_HOST . 'lyric/fcgi-bin/fcg_query_lyric_new.fcg';
 
     /**
      * 获取歌曲播放地址中的VKey验证密钥
      */
-    const URL_GETMUSICPLAYURLVKEY = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg';
+    const URL_GETMUSICPLAYURLVKEY = self::CY_QQ_HOST . 'base/fcgi-bin/fcg_music_express_mobile3.fcg';
 
     /**
      * 搜索接口
      */
-    const URL_SEARCH = 'https://c.y.qq.com/soso/fcgi-bin/client_search_cp';
+    const URL_SEARCH = self::CY_QQ_HOST . 'soso/fcgi-bin/client_search_cp';
 
     /**
      * 初始化参数
@@ -102,13 +106,12 @@ class QQ
         'songmid'                   =>  null,
     ];
 
-    private   $format;
-    private   $headers = [];
-
     /**
      * @var array 设置请求参数
      */
     protected $attributes = self::INIT_ATTRIBUTES;
+
+    protected $headers = [];
 
     /**
      * 设置请求参数
@@ -133,9 +136,11 @@ class QQ
      */
     public function getSinger()
     {
+        $data = null;
+
         $this->attributes['channel'] = 'singer';
 
-        $this->format = [
+        $format = [
             'channel'       =>   $this->attributes['channel'],
             'page'          =>   $this->attributes['page'],
             'key'           =>   $this->attributes['key'],
@@ -144,7 +149,7 @@ class QQ
             'pagenum'       =>   $this->attributes['pagenum'],
         ];
 
-        $list = json_decode($this->getCurl(self::URL_GETSINGER), TRUE);
+        $list = json_decode($this->getCurl(self::URL_GETSINGER, $format), TRUE);
         if ( ((int) $list['code']) === 0) {
             $data['list'] = $list['data']['list'];
 
@@ -169,10 +174,12 @@ class QQ
      */
     public function getSingerInfo($singer_mid = null)
     {
+        $data = null;
+
         $this->attributes['singermid'] = $singer_mid ? : $this->attributes['singermid'];
         $this->attributes['format'] = 'xml';
 
-        $this->format = [
+        $format = [
             'singermid'     =>  $this->attributes['singermid'],
             'format'        =>  $this->attributes['format'],
         ];
@@ -181,7 +188,7 @@ class QQ
 
         libxml_disable_entity_loader(true);
 
-        $info = $this->getCurl(self::URL_GETSINGERINFO);
+        $info = $this->getCurl(self::URL_GETSINGERINFO, $format);
         $info = json_decode(json_encode(simplexml_load_string($info, 'SimpleXMLElement', LIBXML_NOCDATA)), TRUE);
         if ( ((int) $info['code']) === 0) {
             $data['info'] = $info['data']['info'];
@@ -199,9 +206,11 @@ class QQ
      */
     public function getSingerAlbum($singer_mid = null)
     {
+        $data = null;
+
         $this->attributes['singermid'] = $singer_mid ? : $this->attributes['singermid'];
 
-        $this->format = [
+        $format = [
             'jsonpCallback'     =>  '',
             'loginUin'          =>  $this->attributes['loginUin'],
             'needNewCode'       =>  $this->attributes['needNewCode'],
@@ -211,7 +220,7 @@ class QQ
             'exstaus'           =>  1,
         ];
 
-        $list = json_decode($this->getCurl(self::URL_GETSINGERALBUM), TRUE);
+        $list = json_decode($this->getCurl(self::URL_GETSINGERALBUM, $format), TRUE);
         if ( ((int) $list['code']) === 0) {
             foreach ($list['data']['list'] as $key => $value) {
                 $list['data']['list'][$key]['coverImg'] = $this->getPicUrl($value['albumMID'], 'album', '500x500');
@@ -233,14 +242,16 @@ class QQ
      */
     public function getAlbumMusic($album_mid = null)
     {
+        $data = null;
+
         $this->attributes['albummid'] = $album_mid ? : $this->attributes['albummid'];
 
-        $this->format = [
+        $format = [
             'albummid'      =>  $this->attributes['albummid'],
             'loginUin'      =>  $this->attributes['loginUin'],
         ];
 
-        $list = json_decode($this->getCurl(self::URL_GETALBUMMUSIC), TRUE);
+        $list = json_decode($this->getCurl(self::URL_GETALBUMMUSIC, $format), TRUE);
         if ( ((int) $list['code']) === 0) {
             foreach ($list['data']['list'] as $key => $value) {
                 $list['data']['list'][$key]['coverImg'] = $this->getPicUrl($value['albumMID'], 'album', '500x500');
@@ -262,9 +273,11 @@ class QQ
      */
     public function getSingerMusic($singer_mid = null)
     {
+        $data = null;
+
         $this->attributes['singermid'] = $singer_mid ? : $this->attributes['singermid'];
 
-        $this->format = [
+        $format = [
             'needNewCode' => $this->attributes['needNewCode'],
             'order'       => $this->attributes['order'],
             'begin'       => $this->attributes['begin'],
@@ -273,7 +286,7 @@ class QQ
             'singermid'   => $this->attributes['singermid'],
         ];
 
-        $info = json_decode($this->getCurl(self::URL_GETSINGERMUSIC), TRUE);
+        $info = json_decode($this->getCurl(self::URL_GETSINGERMUSIC, $format), TRUE);
         if ( ((int) $info['code']) === 0) {
             foreach ($info['data']['list'] as $key => $value) {
                 $info['data']['list'][$key]['coverImg'] = $this->getPicUrl($value['musicData']['albummid'], 'music', '500x500');
@@ -295,15 +308,17 @@ class QQ
      */
     public function getAlbum($album_mid = null)
     {
+        $data = null;
+
         $this->attributes['albummid'] = $album_mid ? : $this->attributes['albummid'];
 
-        $this->format = [
+        $format = [
             'needNewCode' => $this->attributes['needNewCode'],
             'loginUin'    => $this->attributes['loginUin'],
             'albummid'    => $this->attributes['albummid'],
         ];
 
-        $info = json_decode($this->getCurl(self::URL_GETALBUM), TRUE);
+        $info = json_decode($this->getCurl(self::URL_GETALBUM, $format), TRUE);
         if ( ((int) $info['code']) === 0) {
             foreach ($info['data']['list'] as $key => $value) {
                 $info['data']['list'][$key]['coverImg'] = $this->getPicUrl($value['albummid'], 'music', '500x500');
@@ -326,6 +341,8 @@ class QQ
      */
     public function getMusicPlayUrl($song_mid, $format = 'm4a')
     {
+        $data = null;
+
         $ret = $this->getMusicPlayVKey($song_mid, $format);
         if (isset($ret['vkey'])) {
             $data['url'] = self::URL_GETPLAYURL . $ret['filename'] . '?guid=' . $ret['guid'] . '&vkey=' . $ret['vkey'] . '&uin=0&fromtag=53';
@@ -374,7 +391,7 @@ class QQ
         $filename = $prefixFormat . $this->attributes['songmid'] . '.' . $format;
         $cid = 205361747;
 
-        $this->format = [
+        $format = [
             'songmid'       =>  $this->attributes['songmid'],
             'filename'      =>  $filename,
             'guid'          =>  $this->attributes['loginUin'],
@@ -386,7 +403,7 @@ class QQ
 
         $this->setHeaders();
 
-        $data = json_decode($this->getCurl(self::URL_GETMUSICPLAYURLVKEY), TRUE);
+        $data = json_decode($this->getCurl(self::URL_GETMUSICPLAYURLVKEY, $format), TRUE);
         if ( ((int) $data['code']) === 0) {
             $ret = [
                 'guid'          =>  $this->attributes['loginUin'],
@@ -412,9 +429,11 @@ class QQ
      */
     public function getMusicLyric($song_mid = null)
     {
+        $data = null;
+
         $this->attributes['songmid'] = $song_mid ? : $this->attributes['songmid'];
 
-        $this->format = [
+        $format = [
             'needNewCode'   =>  $this->attributes['needNewCode'],
             'pcachetime'    =>  time() . rand(10, 99),
             'songmid'       =>  $this->attributes['songmid'],
@@ -422,7 +441,7 @@ class QQ
 
         $this->setHeaders();
 
-        $info = json_decode($this->getCurl(self::URL_GETMUSICLYRIC), TRUE);
+        $info = json_decode($this->getCurl(self::URL_GETMUSICLYRIC, $format), TRUE);
         if ( ((int) $info['code']) === 0) {
             $data['lyric'] = base64_decode($info['lyric']);
         }
@@ -440,13 +459,15 @@ class QQ
      */
     public function getSearch($keyword, $page = 1, $num = 20)
     {
-        $this->format = [
+        $data = null;
+
+        $format = [
             'w'         =>  $keyword,
             'p'         =>  (int) $page,
             'n'         =>  (int) $num,
         ];
 
-        $list = json_decode($this->getCurl(self::URL_SEARCH), TRUE);
+        $list = json_decode($this->getCurl(self::URL_SEARCH, $format), TRUE);
         if ( ((int) $list['code']) === 0 ) {
             $data['list'] = $list['data'];
 
@@ -486,16 +507,16 @@ class QQ
     {
         // 强行设置qq域名，绕过qq的安全保护数据
         $this->headers = [
-            'Referer: https://c.y.qq.com/',
-            'Host: c.y.qq.com'
+            'Referer: ' . self::CY_QQ_HOST,
+            'Host: ' . self::CY_QQ_DOMAIN
         ];
 
         return $this->headers;
     }
 
-    private function getCurl($function)
+    private function getCurl($url, $format = [])
     {
-        $this->format += [
+        $format += [
             'g_tk'        =>   $this->attributes['g_tk'],
             'inCharset'   =>   $this->attributes['inCharset'],
             'outCharset'  =>   $this->attributes['outCharset'],
@@ -505,11 +526,10 @@ class QQ
             'platform'    =>   $this->attributes['platform'],
         ];
 
-        $ret = sgc_curl($function . '?' . http_build_query($this->format), FALSE, 'GET', NULL, $this->headers);
+        $ret = sgc_curl($url . '?' . http_build_query($format), false, 'GET', null, $this->headers);
 
         // 回归初始化，主要目的:解决Swoole等常驻内存下单例导致的数据残留，影响其他请求返回的结果集。(不同的数据请求，建议用完后销毁重置)
         $this->attributes = self::INIT_ATTRIBUTES;
-        $this->format = NULL;
         $this->headers = [];
 
         return $ret;

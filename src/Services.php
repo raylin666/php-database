@@ -86,15 +86,21 @@ class Services
     public function getResources()
     {
         try {
-            $rs = self::MUSIC_PLATFORMS_RESOURCES[$this->platform];
+            $rs = isset(self::MUSIC_PLATFORMS_RESOURCES[$this->platform]) ? self::MUSIC_PLATFORMS_RESOURCES[$this->platform] : $this;
             $this->resources = new $rs();
 
         } catch (\Exception $exception) {
-
             return $exception->getMessage();
         }
 
         return $this->resources;
+    }
+
+    public function __call($name, $arguments)
+    {
+        // TODO: Implement __call() method.
+
+        return null;
     }
 
 }

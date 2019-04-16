@@ -20,6 +20,11 @@ namespace ShugaChara\MusicSDK;
 use ShugaChara\CoreSDK\Traits\Singleton;
 use ShugaChara\MusicSDK\Media\QQ;
 
+/**
+ * Class Services
+ * @method static $this getInstance
+ * @package ShugaChara\MusicSDK
+ */
 class Services
 {
     use Singleton;

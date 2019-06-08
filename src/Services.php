@@ -20,11 +20,6 @@ namespace ShugaChara\MusicSDK;
 use ShugaChara\CoreSDK\Traits\Singleton;
 use ShugaChara\MusicSDK\Media\QQ;
 
-/**
- * Class Services
- * @method static $this getInstance
- * @package ShugaChara\MusicSDK
- */
 class Services
 {
     use Singleton;
@@ -54,7 +49,7 @@ class Services
     /**
      * @var 音乐资源
      */
-    private $resources;
+    private $resources = [];
 
     /**
      * 设置平台类型
@@ -91,14 +86,19 @@ class Services
     public function getResources()
     {
         try {
-            $rs = isset(self::MUSIC_PLATFORMS_RESOURCES[$this->platform]) ? self::MUSIC_PLATFORMS_RESOURCES[$this->platform] : $this;
-            $this->resources = new $rs();
+            if (isset($this->resources[$this->platform])) {
+                return $this->resources[$this->platform];
+            }
+
+            $rs = isset(self::MUSIC_PLATFORMS_RESOURCES[$this->platform]) ? self::MUSIC_PLATFORMS_RESOURCES[$this->platform] : self::MUSIC_PLATFORMS_RESOURCES[self::MUSIC_QQ_PLATFORM];
+            $platform = $this->platform;
+            $this->resources[$platform] = new $rs();
+            $this->platform = self::MUSIC_QQ_PLATFORM;
+            return $this->resources[$platform];
 
         } catch (\Exception $exception) {
             return $exception->getMessage();
         }
-
-        return $this->resources;
     }
 
     public function __call($name, $arguments)

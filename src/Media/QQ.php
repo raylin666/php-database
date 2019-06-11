@@ -132,9 +132,10 @@ class QQ
     /**
      * 获取歌手数据
      *
+     * @param $is_getpage bool 是否获取页数条数码
      * @return mixed
      */
-    public function getSinger()
+    public function getSinger($is_getpage = false)
     {
         $data = null;
 
@@ -151,6 +152,14 @@ class QQ
 
         $list = json_decode($this->getCurl(self::URL_GETSINGER, $format), TRUE);
         if ( ((int) $list['code']) === 0) {
+            if ($is_getpage) {
+                return [
+                    'pagesize'     =>   $list['data']['per_page'],
+                    'total'        =>   $list['data']['total'],
+                    'total_page'   =>   $list['data']['total_page']
+                ];
+            }
+
             $data['list'] = $list['data']['list'];
 
             if ($data['list']) {

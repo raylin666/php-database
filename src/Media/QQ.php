@@ -278,9 +278,10 @@ class QQ
      * 获取歌手音乐列表
      *
      * @param null $singer_mid
+     * @param bool $is_getnum 是否获取总条数
      * @return mixed
      */
-    public function getSingerMusic($singer_mid = null)
+    public function getSingerMusic($singer_mid = null, $is_getnum = false)
     {
         $data = null;
 
@@ -297,6 +298,12 @@ class QQ
 
         $info = json_decode($this->getCurl(self::URL_GETSINGERMUSIC, $format), TRUE);
         if ( ((int) $info['code']) === 0) {
+            if ($is_getnum) {
+                return [
+                    'num'       =>  $info['data']['total']
+                ];
+            }
+
             foreach ($info['data']['list'] as $key => $value) {
                 $info['data']['list'][$key]['coverImg'] = $this->getPicUrl($value['musicData']['albummid'], 'music', '500x500');
                 $info['data']['list'][$key]['minImg'] = $this->getPicUrl($value['musicData']['albummid'], 'music', '300x300');

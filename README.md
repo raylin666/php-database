@@ -1,6 +1,6 @@
-# MUSIC-SDK 
+# MUSIC
 
-[![GitHub release](https://img.shields.io/github/release/shugachara/music-sdk.svg)](https://github.com/shugachara/music-sdk/releases)
+[![GitHub release](https://img.shields.io/github/release/shugachara/music.svg)](https://github.com/shugachara/music/releases)
 [![PHP version](https://img.shields.io/badge/php-%3E%207-orange.svg)](https://github.com/php/php-src)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](#LICENSE)
 
@@ -14,14 +14,14 @@
 
 ## 包地址
 
-[Music-SDK](https://packagist.org/packages/shugachara/music-sdk)
+[Music-SDK](https://packagist.org/packages/shugachara/music)
 
 ## 使用方法
 
 **安装**
 
 ```
-composer require shugachara/music-sdk
+composer require shugachara/music
 ```
 
 **调用**
@@ -50,6 +50,14 @@ class IndexController extends Controller
 1. 本站音频文件来自各网站接口，本站不会修改任何音频文件
 2. 音频版权来自各网站，本站只提供数据查询服务，不提供任何音频存储和贩卖服务
 
-## 开源协议
+### 贡献
 
-The MIT License (MIT)
+非常欢迎感兴趣，并且愿意参与其中，共同打造更好PHP生态。
+
+* 在你的系统中使用，将遇到的问题 [反馈](https://github.com/shugachara/music/issues)
+
+### 联系
+
+如果你在使用中遇到问题，请联系: [1099013371@qq.com](mailto:1099013371@qq.com). 博客: [kaka 梦很美](http://www.ls331.com)
+
+## License MIT

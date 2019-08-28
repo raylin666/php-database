@@ -1,15 +1,15 @@
 {
-    "name": "shugachara/music-sdk",
+    "name": "shugachara/music",
     "description": "音乐SDK",
     "keywords": [
         "sdk",
         "music",
         "shugachara",
-        "music-sdk"
+        "play"
     ],
     "type": "library",
     "license": "MIT",
-    "homepage": "https://github.com/shugachara/music-sdk",
+    "homepage": "https://github.com/shugachara/music",
     "authors": [
         {
             "name": "shugachara",
@@ -18,7 +18,7 @@
     ],
     "require": {
         "php": ">=7.0",
-        "shugachara/core-sdk": "^2.0"
+        "shugachara/core": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~6.0"
@@ -28,7 +28,7 @@
 
         ],
         "psr-4": {
-            "ShugaChara\\MusicSDK\\": "src/"
+            "ShugaChara\\Music\\": "src/"
         }
     },
     "autoload-dev": {

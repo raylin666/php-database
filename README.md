@@ -14,7 +14,7 @@
 
 ## 包地址
 
-[Music-SDK](https://packagist.org/packages/shugachara/music)
+[Music](https://packagist.org/packages/shugachara/music)
 
 ## 使用方法
 

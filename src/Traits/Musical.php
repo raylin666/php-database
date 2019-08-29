@@ -28,74 +28,242 @@ trait Musical
      */
     protected function curlset($server)
     {
-        $headers = [];
-
         switch ($server) {
             case API::SITE_NETEASE:
-                {
-                    $headers = [
-                        'Referer' => 'https://music.163.com/',
-                        'Cookie' => 'appver=1.5.9; os=osx; __remember_me=true; osver=%E7%89%88%E6%9C%AC%2010.13.5%EF%BC%88%E7%89%88%E5%8F%B7%2017F77%EF%BC%89;',
-                        'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/605.1.15 (KHTML, like Gecko)',
-                        'X-Real-IP' => long2ip(mt_rand(1884815360, 1884890111)),
-                        'Accept' => '*/*',
-                        'Accept-Language' => 'zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4',
-                        'Connection' => 'keep-alive',
-                        'Content-Type' => 'application/x-www-form-urlencoded',
-                    ];
-
-                    break;
-                }
+                return $this->setHeaderNetease();
             case API::SITE_TENCENT:
-                {
-                    $headers = [
-                        'Referer' => 'http://y.qq.com',
-                        'Cookie' => 'pgv_pvi=22038528; pgv_si=s3156287488; pgv_pvid=5535248600; yplayer_open=1; ts_last=y.qq.com/portal/player.html; ts_uid=4847550686; yq_index=0; qqmusic_fromtag=66; player_exist=1',
-                        'User-Agent' => 'QQ%E9%9F%B3%E4%B9%90/54409 CFNetwork/901.1 Darwin/17.6.0 (x86_64)',
-                        'Accept' => '*/*',
-                        'Accept-Language' => 'zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4',
-                        'Connection' => 'keep-alive',
-                        'Content-Type' => 'application/x-www-form-urlencoded',
-                    ];
-
-                    break;
-                }
+                return $this->setHeaderTencent();
             case API::SITE_XIAMI:
-                {
-                    $headers = [
-                        'Cookie' => '_m_h5_tk=15d3402511a022796d88b249f83fb968_1511163656929; _m_h5_tk_enc=b6b3e64d81dae577fc314b5c5692df3c',
-                        'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) XIAMI-MUSIC/3.1.1 Chrome/56.0.2924.87 Electron/1.6.11 Safari/537.36',
-                        'Accept' => 'application/json',
-                        'Content-type' => 'application/x-www-form-urlencoded',
-                        'Accept-Language' => 'zh-CN',
-                    ];
-
-                    break;
-                }
+                return $this->setHeaderXiami();
             case API::SITE_KUGOU:
-                {
-                    $headers = [
-                        'User-Agent' => 'IPhone-8990-searchSong',
-                        'UNI-UserAgent' => 'iOS11.4-Phone8990-1009-0-WiFi',
-                    ];
-
-                    break;
-                }
+                return $this->setHeaderKugou();
             case API::SITE_BAIDU:
-                {
-                    $headers = [
-                        'Cookie' => 'BAIDUID=' . $this->getRandomHex(32) . ':FG=1',
-                        'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) baidu-music/1.2.1 Chrome/66.0.3359.181 Electron/3.0.5 Safari/537.36',
-                        'Accept' => '*/*',
-                        'Content-type' => 'application/json;charset=UTF-8',
-                        'Accept-Language' => 'zh-CN',
-                    ];
-
-                    break;
-                }
+                return $this->setHeaderBaidu();
         }
+    }
 
-        return $headers;
+    /**
+     * 设置网易云Header
+     *
+     * @return array
+     */
+    protected function setHeaderNetease()
+    {
+        return [
+            'Referer' => 'https://music.163.com/',
+            'Cookie' => 'appver=1.5.9; os=osx; __remember_me=true; osver=%E7%89%88%E6%9C%AC%2010.13.5%EF%BC%88%E7%89%88%E5%8F%B7%2017F77%EF%BC%89;',
+            'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/605.1.15 (KHTML, like Gecko)',
+            'X-Real-IP' => long2ip(mt_rand(1884815360, 1884890111)),
+            'Accept' => '*/*',
+            'Accept-Language' => 'zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4',
+            'Connection' => 'keep-alive',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ];
+    }
+
+    /**
+     * 设置腾讯Header
+     *
+     * @return array
+     */
+    protected function setHeaderTencent()
+    {
+        return [
+            'Referer' => 'http://y.qq.com',
+            'Cookie' => 'pgv_pvi=22038528; pgv_si=s3156287488; pgv_pvid=5535248600; yplayer_open=1; ts_last=y.qq.com/portal/player.html; ts_uid=4847550686; yq_index=0; qqmusic_fromtag=66; player_exist=1',
+            'User-Agent' => 'QQ%E9%9F%B3%E4%B9%90/54409 CFNetwork/901.1 Darwin/17.6.0 (x86_64)',
+            'Accept' => '*/*',
+            'Accept-Language' => 'zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4',
+            'Connection' => 'keep-alive',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ];
+    }
+
+    /**
+     * 设置虾米Header
+     *
+     * @return array
+     */
+    protected function setHeaderXiami()
+    {
+        return [
+            'Cookie' => '_m_h5_tk=15d3402511a022796d88b249f83fb968_1511163656929; _m_h5_tk_enc=b6b3e64d81dae577fc314b5c5692df3c',
+            'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) XIAMI-MUSIC/3.1.1 Chrome/56.0.2924.87 Electron/1.6.11 Safari/537.36',
+            'Accept' => 'application/json',
+            'Content-type' => 'application/x-www-form-urlencoded',
+            'Accept-Language' => 'zh-CN',
+        ];
+    }
+
+    /**
+     * 设置酷狗Header
+     *
+     * @return array
+     */
+    protected function setHeaderKugou()
+    {
+        return [
+            'User-Agent' => 'IPhone-8990-searchSong',
+            'UNI-UserAgent' => 'iOS11.4-Phone8990-1009-0-WiFi',
+        ];
+    }
+
+    /**
+     * 设置百度Header
+     *
+     * @return array
+     */
+    protected function setHeaderBaidu()
+    {
+        return [
+            'Cookie' => 'BAIDUID=' . $this->getRandomHex(32) . ':FG=1',
+            'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) baidu-music/1.2.1 Chrome/66.0.3359.181 Electron/3.0.5 Safari/537.36',
+            'Accept' => '*/*',
+            'Content-type' => 'application/json;charset=UTF-8',
+            'Accept-Language' => 'zh-CN',
+        ];
+    }
+
+    /**
+     * 网易云搜索
+     *
+     * @param        $apiUrl
+     * @param        $keyword
+     * @param array  $option
+     * @param string $method
+     * @return array
+     */
+    protected function searchNetease($apiUrl, $keyword, array $option = [], $method = 'POST')
+    {
+        return [
+            'method' => $method,
+            'url'    => $apiUrl,
+            'body'   => [
+                's'      => $keyword,
+                'type'   => isset($option['type']) ? $option['type'] : 1,
+                'limit'  => isset($option['limit']) ? $option['limit'] : 30,
+                'total'  => 'true',
+                'offset' => isset($option['page']) && isset($option['limit']) ? ($option['page'] - 1) * $option['limit'] : 0,
+            ],
+            'encode' => 'netease_AESCBC',
+            'format' => 'result.songs',
+        ];
+    }
+
+    /**
+     * 腾讯QQ搜索
+     *
+     * @param        $apiUrl
+     * @param        $keyword
+     * @param array  $option
+     * @param string $method
+     * @return array
+     */
+    protected function searchTencent($apiUrl, $keyword, array $option = [], $method = 'GET')
+    {
+        return [
+            'method' => $method,
+            'url'    => $apiUrl,
+            'body'   => [
+                'format'   => 'json',
+                'p'        => isset($option['page']) ? $option['page'] : 1,
+                'n'        => isset($option['limit']) ? $option['limit'] : 30,
+                'w'        => $keyword,
+                'aggr'     => 1,
+                'lossless' => 1,
+                'cr'       => 1,
+                'new_json' => 1,
+            ],
+            'format' => 'data.song.list',
+        ];
+    }
+
+    /**
+     * 虾米搜索
+     *
+     * @param        $apiUrl
+     * @param        $keyword
+     * @param array  $option
+     * @param string $method
+     * @return array
+     */
+    protected function searchXiami($apiUrl, $keyword, array $option = [], $method = 'GET')
+    {
+        return [
+            'method' => $method,
+            'url'    => $apiUrl,
+            'body'   => [
+                'data' => [
+                    'key'      => $keyword,
+                    'pagingVO' => [
+                        'page'     => isset($option['page']) ? $option['page'] : 1,
+                        'pageSize' => isset($option['limit']) ? $option['limit'] : 30,
+                    ],
+                ],
+                'r' => 'mtop.alimusic.search.searchservice.searchsongs',
+            ],
+            'encode' => 'xiami_sign',
+            'format' => 'data.data.songs',
+        ];
+    }
+
+    /**
+     * 酷狗搜索
+     *
+     * @param        $apiUrl
+     * @param        $keyword
+     * @param array  $option
+     * @param string $method
+     * @return array
+     */
+    protected function searchKugou($apiUrl, $keyword, array $option = [], $method = 'GET')
+    {
+        return [
+            'method' => $method,
+            'url'    => $apiUrl,
+            'body'   => [
+                'api_ver'   => 1,
+                'area_code' => 1,
+                'correct'   => 1,
+                'pagesize'  => isset($option['limit']) ? $option['limit'] : 30,
+                'plat'      => 2,
+                'tag'       => 1,
+                'sver'      => 5,
+                'showtype'  => 10,
+                'page'      => isset($option['page']) ? $option['page'] : 1,
+                'keyword'   => $keyword,
+                'version'   => 8990,
+            ],
+            'format' => 'data.info',
+        ];
+    }
+
+    /**
+     * 百度搜索
+     *
+     * @param        $apiUrl
+     * @param        $keyword
+     * @param array  $option
+     * @param string $method
+     * @return array
+     */
+    protected function searchBaidu($apiUrl, $keyword, array $option = [], $method = 'GET')
+    {
+        return [
+            'method' => $method,
+            'url'    => $apiUrl,
+            'body'   => [
+                'from'      => 'qianqianmini',
+                'method'    => 'baidu.ting.search.merge',
+                'isNew'     => 1,
+                'platform'  => 'darwin',
+                'page_no'   => isset($option['page']) ? $option['page'] : 1,
+                'query'     => $keyword,
+                'version'   => '11.2.1',
+                'page_size' => isset($option['limit']) ? $option['limit'] : 30,
+            ],
+            'format' => 'result.song_info.song_list',
+        ];
     }
 
     /**

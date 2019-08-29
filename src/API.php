@@ -56,6 +56,34 @@ class API
     ];
 
     /**
+     * 平台API接口地址
+     */
+    const SITES_API = [
+        'search'        =>      [
+            self::SITE_NETEASE      =>      [
+                'method'        =>      'POST',
+                'url'           =>      'http://music.163.com/api/cloudsearch/pc'
+            ],
+            self::SITE_TENCENT      =>      [
+                'method'        =>      'GET',
+                'url'           =>      'https://c.y.qq.com/soso/fcgi-bin/client_search_cp'
+            ],
+            self::SITE_XIAMI        =>      [
+                'method'        =>      'GET',
+                'url'           =>      'https://acs.m.xiami.com/h5/mtop.alimusic.search.searchservice.searchsongs/1.0/'
+            ],
+            self::SITE_KUGOU        =>      [
+                'method'        =>      'GET',
+                'url'           =>      'http://mobilecdn.kugou.com/api/v3/search/song'
+            ],
+            self::SITE_BAIDU        =>      [
+                'method'        =>      'GET',
+                'url'           =>      'http://musicapi.taihe.com/v1/restserver/ting'
+            ],
+        ]
+    ];
+
+    /**
      * @var 平台服务名
      */
     protected $server;
@@ -136,6 +164,12 @@ class API
         return $this;
     }
 
+    /**
+     * API执行
+     *
+     * @param $api
+     * @return false|mixed|string
+     */
     protected function exec($api)
     {
         if (isset($api['encode'])) {
@@ -166,5 +200,35 @@ class API
         }
 
         return $this->data;
+    }
+
+    /**
+     * 歌曲搜索
+     *
+     * @param       $keyword
+     * @param array $option
+     * @return false|mixed|string
+     */
+    public function search($keyword, array $option = [])
+    {
+        switch ($this->server) {
+            case self::SITE_NETEASE:
+                $api = $this->searchNetease(self::SITES_API['search'][self::SITE_NETEASE]['url'], $keyword, $option, self::SITES_API['search'][self::SITE_NETEASE]['method']);
+                break;
+            case self::SITE_TENCENT:
+                $api = $this->searchTencent(self::SITES_API['search'][self::SITE_TENCENT]['url'], $keyword, $option, self::SITES_API['search'][self::SITE_TENCENT]['method']);
+                break;
+            case self::SITE_XIAMI:
+                $api = $this->searchXiami(self::SITES_API['search'][self::SITE_XIAMI]['url'], $keyword, $option, self::SITES_API['search'][self::SITE_XIAMI]['method']);
+                break;
+            case self::SITE_KUGOU:
+                $api = $this->searchKugou(self::SITES_API['search'][self::SITE_KUGOU]['url'], $keyword, $option, self::SITES_API['search'][self::SITE_KUGOU]['method']);
+                break;
+            case self::SITE_BAIDU:
+                $api = $this->searchBaidu(self::SITES_API['search'][self::SITE_BAIDU]['url'], $keyword, $option, self::SITES_API['search'][self::SITE_BAIDU]['method']);
+                break;
+        }
+
+        return $this->exec($api);
     }
 }

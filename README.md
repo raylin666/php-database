@@ -8,7 +8,7 @@
 
 经常情况下(特别是个人博客类网站) 需要使用音乐播放,本作者就是其中一个,所以在此开发音乐SDK,方便使用。
 
-目前只开发完QQ音乐接口，后续会开发网易云、虾米等平台。
+目前已开放网易云、 腾讯QQ音乐、百度、酷狗、虾米等平台接口。
 
 我将会一直维护该项目, 如果有需要改进的地方，欢迎 issue (包括Bug/建议等)。但数据调用的是各网站的 API 接口，有的接口并不是开放的，随时可能失效，或许不能及时更新最新可用代码，本项目相关代码仅供参考。
 
@@ -30,15 +30,12 @@ composer require shugachara/music
 <?php
 namespace App\Http\Controllers;
 
-use ShugaChara\MusicSDK\Services as MusicServices;
+use ShugaChara\Music\API;
 
-class IndexController extends Controller
-{
-    public function index()
-    {
-       return MusicServices::getInstance()->setPlatform('QQ')->getResources()->getSinger();
-    }
-}
+$r = API::getInstance()->setSite('xiami')->setFormat(true);
+dump($r->search('生而为人'));
+$r->setFormat(false);
+dd($r->artist('2110488326'));
 ```
 
 ## 更新日志

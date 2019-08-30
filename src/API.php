@@ -328,7 +328,9 @@ class API
         $this->data = $this->raw;
 
         if (isset($api['decode'])) {
-            $this->data = call_user_func_array([$this, $api['decode']], [$this->data]);
+            $this->data = json_decode($this->data, true);
+            $this->data['api'] = $api;
+            $this->data = call_user_func_array([$this, $api['decode']], [json_encode($this->data)]);
         }
         if (isset($api['format'])) {
             $this->data = $this->clean($this->server, $this->data, $api['format']);
@@ -397,7 +399,7 @@ class API
     }
 
     /**
-     * 专辑
+     * 专辑 (setFormat 建议设置为false)
      *
      * @param $id
      * @return false|mixed|string
@@ -486,7 +488,8 @@ class API
     /**
      * 歌曲播放地址
      *
-     * @param $id
+     * @param     $id
+     * @param int $br
      * @return false|mixed|string
      */
     public function playurl($id, $br = 320)
@@ -509,6 +512,69 @@ class API
                 break;
         }
 
+        $api['br'] = $br;
+
         return $this->exec($api);
+    }
+
+    /**
+     * 歌词
+     *
+     * @param $id
+     * @return false|mixed|string
+     */
+    public function lyric($id)
+    {
+        switch ($this->server) {
+            case self::SITE_NETEASE:
+                $api = $this->lyricNetease(self::SITES_API['lyric'][self::SITE_NETEASE]['url'], $id, self::SITES_API['lyric'][self::SITE_NETEASE]['method']);
+                break;
+            case self::SITE_TENCENT:
+                $api = $this->lyricTencent(self::SITES_API['lyric'][self::SITE_TENCENT]['url'], $id, self::SITES_API['lyric'][self::SITE_TENCENT]['method']);
+                break;
+            case self::SITE_XIAMI:
+                $api = $this->lyricXiami(self::SITES_API['lyric'][self::SITE_XIAMI]['url'], $id, self::SITES_API['lyric'][self::SITE_XIAMI]['method']);
+                break;
+            case self::SITE_KUGOU:
+                $api = $this->lyricKugou(self::SITES_API['lyric'][self::SITE_KUGOU]['url'], $id, self::SITES_API['lyric'][self::SITE_KUGOU]['method']);
+                break;
+            case self::SITE_BAIDU:
+                $api = $this->lyricBaidu(self::SITES_API['lyric'][self::SITE_BAIDU]['url'], $id, self::SITES_API['lyric'][self::SITE_BAIDU]['method']);
+                break;
+        }
+
+        return $this->exec($api);
+    }
+
+    /**
+     * 图片/封面
+     *
+     * @param     $id
+     * @param int $size
+     * @return false|mixed|string
+     */
+    public function pic($id, $size = 300)
+    {
+        switch ($this->server) {
+            case self::SITE_NETEASE:
+                $url = $this->picNetease($id, $size);
+                break;
+            case self::SITE_TENCENT:
+                $url = $this->picTencent($id, $size);
+                break;
+            case self::SITE_XIAMI:
+                $url = $this->picXiami($id, $size);
+                break;
+            case self::SITE_KUGOU:
+                $url = $this->picKugou($id);
+                break;
+            case self::SITE_BAIDU:
+                $url = $this->picBaidu($id);
+                break;
+        }
+
+        return json_encode([
+            'url' => $url
+        ]);
     }
 }

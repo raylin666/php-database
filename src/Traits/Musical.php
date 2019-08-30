@@ -895,6 +895,190 @@ trait Musical
     }
 
     /**
+     * 网易云歌词
+     *
+     * @param        $apiUrl
+     * @param        $id
+     * @param string $method
+     * @return array
+     */
+    protected function lyricNetease($apiUrl, $id, $method = 'POST')
+    {
+        return [
+            'method' => $method,
+            'url' => $apiUrl,
+            'body' => [
+                'id' => $id,
+                'os' => 'linux',
+                'lv' => -1,
+                'kv' => -1,
+                'tv' => -1,
+            ],
+            'encode' => 'netease_AESCBC',
+            'decode' => 'netease_lyric',
+        ];
+    }
+
+    /**
+     * 腾讯QQ歌词
+     *
+     * @param        $apiUrl
+     * @param        $id
+     * @param string $method
+     * @return array
+     */
+    protected function lyricTencent($apiUrl, $id, $method = 'GET')
+    {
+        return [
+            'method' => $method,
+            'url' => $apiUrl,
+            'body' => [
+                'songmid' => $id,
+                'g_tk' => '5381',
+            ],
+            'decode' => 'tencent_lyric',
+        ];
+    }
+
+    /**
+     * 虾米歌词
+     *
+     * @param        $apiUrl
+     * @param        $id
+     * @param string $method
+     * @return array
+     */
+    protected function lyricXiami($apiUrl, $id, $method = 'GET')
+    {
+        return [
+            'method' => $method,
+            'url' => $apiUrl,
+            'body' => [
+                'data' => [
+                    'songId' => $id,
+                ],
+                'r' => 'mtop.alimusic.music.lyricservice.getsonglyrics',
+            ],
+            'encode' => 'xiami_sign',
+            'decode' => 'xiami_lyric',
+        ];
+    }
+
+    /**
+     * 酷狗歌词
+     *
+     * @param        $apiUrl
+     * @param        $id
+     * @param string $method
+     * @return array
+     */
+    protected function lyricKugou($apiUrl, $id, $method = 'GET')
+    {
+        return [
+            'method' => $method,
+            'url' => $apiUrl,
+            'body' => [
+                'keyword' => '%20-%20',
+                'ver' => 1,
+                'hash' => $id,
+                'client' => 'mobi',
+                'man' => 'yes',
+            ],
+            'decode' => 'kugou_lyric',
+        ];
+    }
+
+    /**
+     * 百度歌词
+     *
+     * @param        $apiUrl
+     * @param        $id
+     * @param string $method
+     * @return array
+     */
+    protected function lyricBaidu($apiUrl, $id, $method = 'GET')
+    {
+        return [
+            'method' => $method,
+            'url' => $apiUrl,
+            'body' => [
+                'from' => 'qianqianmini',
+                'method' => 'baidu.ting.song.lry',
+                'songid' => $id,
+                'platform' => 'darwin',
+                'version' => '1.0.0',
+            ],
+            'decode' => 'baidu_lyric',
+        ];
+    }
+
+    /**
+     * 网易云图片
+     *
+     * @param     $id
+     * @param int $size
+     * @return string
+     */
+    protected function picNetease($id, $size = 300)
+    {
+        return 'https://p3.music.126.net/' . $this->netease_encryptId($id) . '/' . $id . '.jpg?param=' . $size . 'y' . $size;
+    }
+
+    /**
+     * 腾讯QQ图片
+     *
+     * @param     $id
+     * @param int $size
+     * @return string
+     */
+    protected function picTencent($id, $size = 300)
+    {
+        return 'https://y.gtimg.cn/music/photo_new/T002R' . $size . 'x' . $size . 'M000' . $id . '.jpg?max_age=2592000';
+    }
+
+    /**
+     * 虾米图片
+     *
+     * @param     $id
+     * @param int $size
+     * @return string
+     */
+    protected function picXiami($id, $size = 300)
+    {
+        $data = API::getInstance()->setFormat(false)->song($id);
+        $data = json_decode($data, true);
+        $url = $data['data']['data']['songDetail']['albumLogo'];
+        return str_replace('http:', 'https:', $url) . '@1e_1c_100Q_' . $size . 'h_' . $size . 'w';
+    }
+
+    /**
+     * 酷狗图片
+     *
+     * @param     $id
+     * @return string
+     */
+    protected function picKugou($id)
+    {
+        $data = API::getInstance()->setFormat(false)->song($id);
+        $data = json_decode($data, true);
+        $url = $data['imgUrl'];
+        return str_replace('{size}', '400', $url);
+    }
+
+    /**
+     * 百度图片
+     *
+     * @param     $id
+     * @return string
+     */
+    protected function picBaidu($id)
+    {
+        $data = API::getInstance()->setFormat(false)->song($id);
+        $data = json_decode($data, true);
+        return isset($data['songinfo']['pic_radio']) ? $data['songinfo']['pic_radio'] : $data['songinfo']['pic_small'];
+    }
+
+    /**
      * 获取加密随机字节串
      *
      * @param $length
@@ -1237,7 +1421,7 @@ trait Musical
                 'module' => 'vkey.GetVkeyServer',
                 'method' => 'CgiGetVkey',
                 'param' => [
-                    'guid' => (string)$guid,
+                    'guid' => (string) $guid,
                     'songmid' => [],
                     'filename' => [],
                     'songtype' => [],
@@ -1264,12 +1448,12 @@ trait Musical
                 'data' => json_encode($payload),
             ],
         ];
-        $response = json_decode($this->exec($api), true);
+        $response = json_decode(API::getInstance()->exec($api), true);
         $vkeys = $response['req_0']['data']['midurlinfo'];
 
         foreach ($type as $index => $vo) {
-            if ($data['data'][0]['file'][$vo[0]] && $vo[1] <= $this->temp['br']) {
-                if (!empty($vkeys[$index]['vkey'])) {
+            if ($data['data'][0]['file'][$vo[0]] && $vo[1] <= array_get($data, 'api.br')) {
+                if (! empty($vkeys[$index]['vkey'])) {
                     $url = [
                         'url' => $response['req_0']['data']['sip'][0] . $vkeys[$index]['purl'],
                         'size' => $data['data'][0]['file'][$vo[0]],
@@ -1279,7 +1463,7 @@ trait Musical
                 }
             }
         }
-        if (!isset($url['url'])) {
+        if (! isset($url['url'])) {
             $url = [
                 'url' => '',
                 'size' => 0,
@@ -1298,7 +1482,7 @@ trait Musical
      */
     protected function xiami_url($result)
     {
-        $url = $temp = [];
+        $url = [];
 
         $data = json_decode($result, true);
 
@@ -1311,7 +1495,7 @@ trait Musical
         ];
         $max = 0;
         foreach ($data['data']['data']['songs'][0]['listenFiles'] as $vo) {
-            if ($type[$vo['quality']] <= $temp['br'] && $type[$vo['quality']] > $max) {
+            if ($type[$vo['quality']] <= array_get($data, 'api.br') && $type[$vo['quality']] > $max) {
                 $max = $type[$vo['quality']];
                 $url = [
                     'url' => $vo['listenFile'],
@@ -1320,7 +1504,7 @@ trait Musical
                 ];
             }
         }
-        if (!isset($url['url'])) {
+        if (! isset($url['url'])) {
             $url = [
                 'url' => '',
                 'size' => 0,
@@ -1339,13 +1523,13 @@ trait Musical
      */
     protected function kugou_url($result)
     {
-        $url = $temp = [];
+        $url = [];
 
         $data = json_decode($result, true);
 
         $max = 0;
         foreach ($data['data'][0]['relate_goods'] as $vo) {
-            if ($vo['info']['bitrate'] <= $temp['br'] && $vo['info']['bitrate'] > $max) {
+            if ($vo['info']['bitrate'] <= array_get($data, 'api.br') && $vo['info']['bitrate'] > $max) {
                 $api = [
                     'method' => 'GET',
                     'url' => 'http://trackercdn.kugou.com/i/v2/',
@@ -1381,27 +1565,27 @@ trait Musical
     }
 
     /**
-     * 百度URL解析a
+     * 百度URL解析
      *
      * @param $result
      * @return false|string
      */
     protected function baidu_url($result)
     {
-        $url = $temp = [];
+        $url = [];
 
         $data = json_decode($result, true);
 
         $max = 0;
         foreach ($data['songurl']['url'] as $vo) {
-            if ($vo['file_bitrate'] <= $temp['br'] && $vo['file_bitrate'] > $max) {
+            if ($vo['file_bitrate'] <= array_get($data, 'api.br') && $vo['file_bitrate'] > $max) {
                 $url = [
                     'url' => $vo['file_link'],
                     'br' => $vo['file_bitrate'],
                 ];
             }
         }
-        if (!isset($url['url'])) {
+        if (! isset($url['url'])) {
             $url = [
                 'url' => '',
                 'br' => -1,
@@ -1546,9 +1730,9 @@ trait Musical
             'artist' => [],
             'album' => $data['al']['name'],
             'pic_id' => isset($data['al']['pic_str']) ? $data['al']['pic_str'] : $data['al']['pic'],
-            'url_id' => $data['id'],
+            'playurl_id' => $data['id'],
             'lyric_id' => $data['id'],
-            'source' => 'netease',
+            'source' => API::SITE_NETEASE,
         ];
         if (isset($data['al']['picUrl'])) {
             preg_match('/\/(\d+)\./', $data['al']['picUrl'], $match);
@@ -1578,9 +1762,9 @@ trait Musical
             'artist' => [],
             'album' => trim($data['album']['title']),
             'pic_id' => $data['album']['mid'],
-            'url_id' => $data['mid'],
+            'playurl_id' => $data['mid'],
             'lyric_id' => $data['mid'],
-            'source' => 'tencent',
+            'source' => API::SITE_TENCENT,
         ];
         foreach ($data['singer'] as $vo) {
             $result['artist'][] = $vo['name'];
@@ -1603,9 +1787,9 @@ trait Musical
             'artist' => [],
             'album' => $data['albumName'],
             'pic_id' => $data['songId'],
-            'url_id' => $data['songId'],
+            'playurl_id' => $data['songId'],
             'lyric_id' => $data['songId'],
-            'source' => 'xiami',
+            'source' => API::SITE_XIAMI,
         ];
         foreach ($data['singerVOs'] as $vo) {
             $result['artist'][] = $vo['artistName'];
@@ -1627,10 +1811,10 @@ trait Musical
             'name' => isset($data['filename']) ? $data['filename'] : $data['fileName'],
             'artist' => [],
             'album' => isset($data['album_name']) ? $data['album_name'] : '',
-            'url_id' => $data['hash'],
+            'playurl_id' => $data['hash'],
             'pic_id' => $data['hash'],
             'lyric_id' => $data['hash'],
-            'source' => 'kugou',
+            'source' => API::SITE_KUGOU,
         ];
         list($result['artist'], $result['name']) = explode(' - ', $result['name'], 2);
         $result['artist'] = explode('、', $result['artist']);
@@ -1652,9 +1836,9 @@ trait Musical
             'artist' => explode(',', $data['author']),
             'album' => $data['album_title'],
             'pic_id' => $data['song_id'],
-            'url_id' => $data['song_id'],
+            'playurl_id' => $data['song_id'],
             'lyric_id' => $data['song_id'],
-            'source' => 'baidu',
+            'source' => self::SITE_BAIDU,
         ];
     }
 }

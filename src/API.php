@@ -80,6 +80,72 @@ class API
                 'method'        =>      'GET',
                 'url'           =>      'http://musicapi.taihe.com/v1/restserver/ting'
             ],
+        ],
+        'song'          =>      [
+            self::SITE_NETEASE      =>      [
+                'method'        =>      'POST',
+                'url'           =>      'http://music.163.com/api/v3/song/detail/'
+            ],
+            self::SITE_TENCENT      =>      [
+                'method'        =>      'GET',
+                'url'           =>      'https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg'
+            ],
+            self::SITE_XIAMI        =>      [
+                'method'        =>      'GET',
+                'url'           =>      'https://acs.m.xiami.com/h5/mtop.alimusic.music.songservice.getsongdetail/1.0/'
+            ],
+            self::SITE_KUGOU        =>      [
+                'method'        =>      'POST',
+                'url'           =>      'http://m.kugou.com/app/i/getSongInfo.php'
+            ],
+            self::SITE_BAIDU        =>      [
+                'method'        =>      'GET',
+                'url'           =>      'http://musicapi.taihe.com/v1/restserver/ting'
+            ]
+        ],
+        'album'          =>      [
+            self::SITE_NETEASE      =>      [
+                'method'        =>      'POST',
+                'url'           =>      'http://music.163.com/api/v1/album/'
+            ],
+            self::SITE_TENCENT      =>      [
+                'method'        =>      'GET',
+                'url'           =>      'https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_detail_cp.fcg'
+            ],
+            self::SITE_XIAMI        =>      [
+                'method'        =>      'GET',
+                'url'           =>      'https://acs.m.xiami.com/h5/mtop.alimusic.music.albumservice.getalbumdetail/1.0/'
+            ],
+            self::SITE_KUGOU        =>      [
+                'method'        =>      'GET',
+                'url'           =>      'http://mobilecdn.kugou.com/api/v3/album/song'
+            ],
+            self::SITE_BAIDU        =>      [
+                'method'        =>      'GET',
+                'url'           =>      'http://musicapi.taihe.com/v1/restserver/ting'
+            ]
+        ],
+        'artist'          =>      [
+            self::SITE_NETEASE      =>      [
+                'method'        =>      'POST',
+                'url'           =>      'http://music.163.com/api/v1/artist/'
+            ],
+            self::SITE_TENCENT      =>      [
+                'method'        =>      'GET',
+                'url'           =>      'https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg'
+            ],
+            self::SITE_XIAMI        =>      [
+                'method'        =>      'GET',
+                'url'           =>      'https://acs.m.xiami.com/h5/mtop.alimusic.music.songservice.getartistsongs/1.0/'
+            ],
+            self::SITE_KUGOU        =>      [
+                'method'        =>      'GET',
+                'url'           =>      'http://mobilecdn.kugou.com/api/v3/singer/song'
+            ],
+            self::SITE_BAIDU        =>      [
+                'method'        =>      'GET',
+                'url'           =>      'http://musicapi.taihe.com/v1/restserver/ting'
+            ]
         ]
     ];
 
@@ -226,6 +292,52 @@ class API
                 break;
             case self::SITE_BAIDU:
                 $api = $this->searchBaidu(self::SITES_API['search'][self::SITE_BAIDU]['url'], $keyword, $option, self::SITES_API['search'][self::SITE_BAIDU]['method']);
+                break;
+        }
+
+        return $this->exec($api);
+    }
+
+    public function song($id)
+    {
+        switch ($this->server) {
+            case self::SITE_NETEASE:
+                $api = $this->songNetease(self::SITES_API['song'][self::SITE_NETEASE]['url'], $id, self::SITES_API['song'][self::SITE_NETEASE]['method']);
+                break;
+            case self::SITE_TENCENT:
+                $api = $this->songTencent(self::SITES_API['song'][self::SITE_TENCENT]['url'], $id, self::SITES_API['song'][self::SITE_TENCENT]['method']);
+                break;
+            case self::SITE_XIAMI:
+                $api = $this->songXiami(self::SITES_API['song'][self::SITE_XIAMI]['url'], $id, self::SITES_API['song'][self::SITE_XIAMI]['method']);
+                break;
+            case self::SITE_KUGOU:
+                $api = $this->songKugou(self::SITES_API['song'][self::SITE_KUGOU]['url'], $id, self::SITES_API['song'][self::SITE_KUGOU]['method']);
+                break;
+            case self::SITE_BAIDU:
+                $api = $this->songBaidu(self::SITES_API['song'][self::SITE_BAIDU]['url'], $id, self::SITES_API['song'][self::SITE_BAIDU]['method']);
+                break;
+        }
+
+        return $this->exec($api);
+    }
+
+    public function album($id)
+    {
+        switch ($this->server) {
+            case self::SITE_NETEASE:
+                $api = $this->songNetease(self::SITES_API['song'][self::SITE_NETEASE]['url'], $id, self::SITES_API['song'][self::SITE_NETEASE]['method']);
+                break;
+            case self::SITE_TENCENT:
+                $api = $this->songTencent(self::SITES_API['song'][self::SITE_TENCENT]['url'], $id, self::SITES_API['song'][self::SITE_TENCENT]['method']);
+                break;
+            case self::SITE_XIAMI:
+                $api = $this->songXiami(self::SITES_API['song'][self::SITE_XIAMI]['url'], $id, self::SITES_API['song'][self::SITE_XIAMI]['method']);
+                break;
+            case self::SITE_KUGOU:
+                $api = $this->songKugou(self::SITES_API['song'][self::SITE_KUGOU]['url'], $id, self::SITES_API['song'][self::SITE_KUGOU]['method']);
+                break;
+            case self::SITE_BAIDU:
+                $api = $this->songBaidu(self::SITES_API['song'][self::SITE_BAIDU]['url'], $id, self::SITES_API['song'][self::SITE_BAIDU]['method']);
                 break;
         }
 

@@ -29,16 +29,11 @@ trait Musical
     protected function curlset($server)
     {
         switch ($server) {
-            case API::SITE_NETEASE:
-                return $this->setHeaderNetease();
-            case API::SITE_TENCENT:
-                return $this->setHeaderTencent();
-            case API::SITE_XIAMI:
-                return $this->setHeaderXiami();
-            case API::SITE_KUGOU:
-                return $this->setHeaderKugou();
-            case API::SITE_BAIDU:
-                return $this->setHeaderBaidu();
+            case API::SITE_NETEASE:     return $this->setHeaderNetease();
+            case API::SITE_TENCENT:     return $this->setHeaderTencent();
+            case API::SITE_XIAMI:       return $this->setHeaderXiami();
+            case API::SITE_KUGOU:       return $this->setHeaderKugou();
+            case API::SITE_BAIDU:       return $this->setHeaderBaidu();
         }
     }
 
@@ -263,6 +258,121 @@ trait Musical
                 'page_size' => isset($option['limit']) ? $option['limit'] : 30,
             ],
             'format' => 'result.song_info.song_list',
+        ];
+    }
+
+    /**
+     * 网易云歌曲
+     *
+     * @param        $apiUrl
+     * @param        $id
+     * @param string $method
+     * @return array
+     */
+    protected function songNetease($apiUrl, $id, $method = 'POST')
+    {
+        return [
+            'method' => $method,
+            'url'    => $apiUrl,
+            'body'   => [
+                'c' => '[{"id":' . $id . ',"v":0}]',
+            ],
+            'encode' => 'netease_AESCBC',
+            'format' => 'songs',
+        ];
+    }
+
+    /**
+     * 腾讯QQ歌曲
+     *
+     * @param        $apiUrl
+     * @param        $id
+     * @param string $method
+     * @return array
+     */
+    protected function songTencent($apiUrl, $id, $method = 'GET')
+    {
+        return [
+            'method' => $method,
+            'url'    => $apiUrl,
+            'body'   => [
+                'songmid'  => $id,
+                'platform' => 'yqq',
+                'format'   => 'json',
+            ],
+            'format' => 'data',
+        ];
+    }
+
+    /**
+     * 虾米歌曲
+     *
+     * @param        $apiUrl
+     * @param        $id
+     * @param string $method
+     * @return array
+     */
+    protected function songXiami($apiUrl, $id, $method = 'GET')
+    {
+        return [
+            'method' => $method,
+            'url'    => $apiUrl,
+            'body'   => [
+                'data' => [
+                    'songId' => $id,
+                ],
+                'r' => 'mtop.alimusic.music.songservice.getsongdetail',
+            ],
+            'encode' => 'xiami_sign',
+            'format' => 'data.data.songDetail',
+        ];
+    }
+
+    /**
+     * 酷狗歌曲
+     *
+     * @param        $apiUrl
+     * @param        $id
+     * @param string $method
+     * @return array
+     */
+    protected function songKugou($apiUrl, $id, $method = 'POST')
+    {
+        return [
+            'method' => $method,
+            'url'    => $apiUrl,
+            'body'   => [
+                'cmd'  => 'playInfo',
+                'hash' => $id,
+                'from' => 'mkugou',
+            ],
+            'format' => '',
+        ];
+    }
+
+    /**
+     * 百度歌曲
+     *
+     * @param        $apiUrl
+     * @param        $id
+     * @param string $method
+     * @return array
+     */
+    protected function songBaidu($apiUrl, $id, $method = 'GET')
+    {
+        return [
+            'method' => $method,
+            'url'    => $apiUrl,
+            'body'   => [
+                'from'     => 'qianqianmini',
+                'method'   => 'baidu.ting.song.getInfos',
+                'songid'   => $id,
+                'res'      => 1,
+                'platform' => 'darwin',
+                'version'  => '1.0.0',
+            ],
+            'encode' => 'baidu_AESCBC',
+            'format' => 'songinfo',
         ];
     }
 

@@ -1,4 +1,4 @@
-# MUSIC
+# MUSIC - 网易云、 腾讯QQ音乐、百度、酷狗、虾米等平台接口
 
 [![GitHub release](https://img.shields.io/github/release/shugachara/music.svg)](https://github.com/shugachara/music/releases)
 [![PHP version](https://img.shields.io/badge/php-%3E%207-orange.svg)](https://github.com/php/php-src)
@@ -37,6 +37,11 @@ $r = API::getInstance()->setSite('xiami')->setFormat(true);
 dump($r->search('生而为人'));
 $r->setFormat(false);
 dd($r->artist('2110488326'));
+
+// 全网 搜索/下载
+$r = Music::getInstance()->search('生而为人');
+dump($r);
+dd(Music::getInstance()->download($r[0]));
 ```
 
 ## 更新日志

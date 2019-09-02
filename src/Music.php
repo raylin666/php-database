@@ -104,6 +104,8 @@ class Music implements MusicInterface
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage(), $exception->getCode(), $exception);
         }
+
+        return true;
     }
 
     /**

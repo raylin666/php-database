@@ -1577,12 +1577,14 @@ trait Musical
         $data = json_decode($result, true);
 
         $max = 0;
-        foreach ($data['songurl']['url'] as $vo) {
-            if ($vo['file_bitrate'] <= array_get($data, 'api.br') && $vo['file_bitrate'] > $max) {
-                $url = [
-                    'url' => $vo['file_link'],
-                    'br' => $vo['file_bitrate'],
-                ];
+        if (isset($data['songurl']['url'])) {
+            foreach ($data['songurl']['url'] as $vo) {
+                if ($vo['file_bitrate'] <= array_get($data, 'api.br') && $vo['file_bitrate'] > $max) {
+                    $url = [
+                        'url' => $vo['file_link'],
+                        'br' => $vo['file_bitrate'],
+                    ];
+                }
             }
         }
         if (! isset($url['url'])) {

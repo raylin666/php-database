@@ -323,7 +323,7 @@ class API
         $this->error = $request['error'];
         $this->status = $request['status'];
 
-        if (!$this->format) return $this->raw;
+        if (! $this->format) return $this->raw;
 
         $this->data = $this->raw;
 
@@ -724,8 +724,6 @@ class API
                 break;
         }
 
-        return json_encode([
-            'url' => $url
-        ]);
+        return json_encode(['url' => $url]);
     }
 }

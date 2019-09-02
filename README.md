@@ -32,6 +32,7 @@ namespace App\Http\Controllers;
 
 use ShugaChara\Music\API;
 
+// 直接调用底层API
 $r = API::getInstance()->setSite('xiami')->setFormat(true);
 dump($r->search('生而为人'));
 $r->setFormat(false);

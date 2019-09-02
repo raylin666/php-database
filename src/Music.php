@@ -76,16 +76,6 @@ class Music implements MusicInterface
         return $songAll;
     }
 
-    public function format(array $song, $keyword)
-    {
-        // TODO: Implement format() method.
-    }
-
-    public function formatAll(array $songs, $keyword)
-    {
-        // TODO: Implement formatAll() method.
-    }
-
     /**
      * 歌曲下载
      *

@@ -28,24 +28,6 @@ interface MusicInterface
     public function search($keyword, $platform);
 
     /**
-     * 格式化歌曲
-     *
-     * @param array $song
-     * @param       $keyword
-     * @return mixed
-     */
-    public function format(array $song, $keyword);
-
-    /**
-     * 格式化所有歌曲
-     *
-     * @param array $songs
-     * @param       $keyword
-     * @return mixed
-     */
-    public function formatAll(array $songs, $keyword);
-
-    /**
      * 下载歌曲
      *
      * @param array $song

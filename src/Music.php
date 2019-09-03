@@ -31,11 +31,6 @@ class Music implements MusicInterface
 
     protected $guzzleOptions = [];
 
-    public function __construct()
-    {
-
-    }
-
     /**
      * 搜索音乐
      *

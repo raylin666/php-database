@@ -29,16 +29,11 @@ trait Musical
     protected function curlset($server)
     {
         switch ($server) {
-            case API::SITE_NETEASE:
-                return $this->setHeaderNetease();
-            case API::SITE_TENCENT:
-                return $this->setHeaderTencent();
-            case API::SITE_XIAMI:
-                return $this->setHeaderXiami();
-            case API::SITE_KUGOU:
-                return $this->setHeaderKugou();
-            case API::SITE_BAIDU:
-                return $this->setHeaderBaidu();
+            case API::SITE_NETEASE: return $this->setHeaderNetease();
+            case API::SITE_TENCENT: return $this->setHeaderTencent();
+            case API::SITE_XIAMI:   return $this->setHeaderXiami();
+            case API::SITE_KUGOU:   return $this->setHeaderKugou();
+            case API::SITE_BAIDU:   return $this->setHeaderBaidu();
         }
     }
 
@@ -50,14 +45,14 @@ trait Musical
     protected function setHeaderNetease()
     {
         return [
-            'Referer' => 'https://music.163.com/',
-            'Cookie' => 'appver=1.5.9; os=osx; __remember_me=true; osver=%E7%89%88%E6%9C%AC%2010.13.5%EF%BC%88%E7%89%88%E5%8F%B7%2017F77%EF%BC%89;',
-            'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/605.1.15 (KHTML, like Gecko)',
-            'X-Real-IP' => long2ip(mt_rand(1884815360, 1884890111)),
-            'Accept' => '*/*',
-            'Accept-Language' => 'zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4',
-            'Connection' => 'keep-alive',
-            'Content-Type' => 'application/x-www-form-urlencoded',
+            'Referer'           =>  'https://music.163.com/',
+            'Cookie'            =>  'appver=1.5.9; os=osx; __remember_me=true; osver=%E7%89%88%E6%9C%AC%2010.13.5%EF%BC%88%E7%89%88%E5%8F%B7%2017F77%EF%BC%89;',
+            'User-Agent'        =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/605.1.15 (KHTML, like Gecko)',
+            'X-Real-IP'         =>  long2ip(mt_rand(1884815360, 1884890111)),
+            'Accept'            =>  '*/*',
+            'Accept-Language'   =>  'zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4',
+            'Connection'        =>  'keep-alive',
+            'Content-Type'      =>  'application/x-www-form-urlencoded',
         ];
     }
 
@@ -69,13 +64,13 @@ trait Musical
     protected function setHeaderTencent()
     {
         return [
-            'Referer' => 'http://y.qq.com',
-            'Cookie' => 'pgv_pvi=22038528; pgv_si=s3156287488; pgv_pvid=5535248600; yplayer_open=1; ts_last=y.qq.com/portal/player.html; ts_uid=4847550686; yq_index=0; qqmusic_fromtag=66; player_exist=1',
-            'User-Agent' => 'QQ%E9%9F%B3%E4%B9%90/54409 CFNetwork/901.1 Darwin/17.6.0 (x86_64)',
-            'Accept' => '*/*',
-            'Accept-Language' => 'zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4',
-            'Connection' => 'keep-alive',
-            'Content-Type' => 'application/x-www-form-urlencoded',
+            'Referer'           =>  'http://y.qq.com',
+            'Cookie'            =>  'pgv_pvi=22038528; pgv_si=s3156287488; pgv_pvid=5535248600; yplayer_open=1; ts_last=y.qq.com/portal/player.html; ts_uid=4847550686; yq_index=0; qqmusic_fromtag=66; player_exist=1',
+            'User-Agent'        =>  'QQ%E9%9F%B3%E4%B9%90/54409 CFNetwork/901.1 Darwin/17.6.0 (x86_64)',
+            'Accept'            =>  '*/*',
+            'Accept-Language'   =>  'zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4',
+            'Connection'        =>  'keep-alive',
+            'Content-Type'      =>  'application/x-www-form-urlencoded',
         ];
     }
 
@@ -87,11 +82,11 @@ trait Musical
     protected function setHeaderXiami()
     {
         return [
-            'Cookie' => '_m_h5_tk=15d3402511a022796d88b249f83fb968_1511163656929; _m_h5_tk_enc=b6b3e64d81dae577fc314b5c5692df3c',
-            'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) XIAMI-MUSIC/3.1.1 Chrome/56.0.2924.87 Electron/1.6.11 Safari/537.36',
-            'Accept' => 'application/json',
-            'Content-type' => 'application/x-www-form-urlencoded',
-            'Accept-Language' => 'zh-CN',
+            'Cookie'            =>  '_m_h5_tk=15d3402511a022796d88b249f83fb968_1511163656929; _m_h5_tk_enc=b6b3e64d81dae577fc314b5c5692df3c',
+            'User-Agent'        =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) XIAMI-MUSIC/3.1.1 Chrome/56.0.2924.87 Electron/1.6.11 Safari/537.36',
+            'Accept'            =>  'application/json',
+            'Content-type'      =>  'application/x-www-form-urlencoded',
+            'Accept-Language'   =>  'zh-CN',
         ];
     }
 
@@ -103,8 +98,8 @@ trait Musical
     protected function setHeaderKugou()
     {
         return [
-            'User-Agent' => 'IPhone-8990-searchSong',
-            'UNI-UserAgent' => 'iOS11.4-Phone8990-1009-0-WiFi',
+            'User-Agent'        =>  'IPhone-8990-searchSong',
+            'UNI-UserAgent'     =>  'iOS11.4-Phone8990-1009-0-WiFi',
         ];
     }
 
@@ -116,11 +111,11 @@ trait Musical
     protected function setHeaderBaidu()
     {
         return [
-            'Cookie' => 'BAIDUID=' . $this->getRandomHex(32) . ':FG=1',
-            'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) baidu-music/1.2.1 Chrome/66.0.3359.181 Electron/3.0.5 Safari/537.36',
-            'Accept' => '*/*',
-            'Content-type' => 'application/json;charset=UTF-8',
-            'Accept-Language' => 'zh-CN',
+            'Cookie'            =>  'BAIDUID=' . $this->getRandomHex(32) . ':FG=1',
+            'User-Agent'        =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) baidu-music/1.2.1 Chrome/66.0.3359.181 Electron/3.0.5 Safari/537.36',
+            'Accept'            =>  '*/*',
+            'Content-type'      =>  'application/json;charset=UTF-8',
+            'Accept-Language'   =>  'zh-CN',
         ];
     }
 
@@ -136,17 +131,17 @@ trait Musical
     protected function searchNetease($apiUrl, $keyword, array $option = [], $method = 'POST')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                's' => $keyword,
-                'type' => isset($option['type']) ? $option['type'] : 1,
-                'limit' => isset($option['limit']) ? $option['limit'] : 30,
-                'total' => 'true',
-                'offset' => isset($option['page']) && isset($option['limit']) ? ($option['page'] - 1) * $option['limit'] : 0,
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                's'             => $keyword,
+                'type'          => isset($option['type']) ? $option['type'] : 1,
+                'limit'         => isset($option['limit']) ? $option['limit'] : 30,
+                'total'         => 'true',
+                'offset'        => isset($option['page']) && isset($option['limit']) ? ($option['page'] - 1) * $option['limit'] : 0,
             ],
-            'encode' => 'netease_AESCBC',
-            'format' => 'result.songs',
+            'encode'    => 'netease_AESCBC',
+            'format'    => 'result.songs',
         ];
     }
 
@@ -162,19 +157,19 @@ trait Musical
     protected function searchTencent($apiUrl, $keyword, array $option = [], $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'format' => 'json',
-                'p' => isset($option['page']) ? $option['page'] : 1,
-                'n' => isset($option['limit']) ? $option['limit'] : 30,
-                'w' => $keyword,
-                'aggr' => 1,
-                'lossless' => 1,
-                'cr' => 1,
-                'new_json' => 1,
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'format'        => 'json',
+                'p'             => isset($option['page']) ? $option['page'] : 1,
+                'n'             => isset($option['limit']) ? $option['limit'] : 30,
+                'w'             => $keyword,
+                'aggr'          => 1,
+                'lossless'      => 1,
+                'cr'            => 1,
+                'new_json'      => 1,
             ],
-            'format' => 'data.song.list',
+            'format'    => 'data.song.list',
         ];
     }
 
@@ -190,20 +185,20 @@ trait Musical
     protected function searchXiami($apiUrl, $keyword, array $option = [], $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'data' => [
-                    'key' => $keyword,
-                    'pagingVO' => [
-                        'page' => isset($option['page']) ? $option['page'] : 1,
-                        'pageSize' => isset($option['limit']) ? $option['limit'] : 30,
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'data'  => [
+                    'key'           => $keyword,
+                    'pagingVO'      => [
+                        'page'      => isset($option['page']) ? $option['page'] : 1,
+                        'pageSize'  => isset($option['limit']) ? $option['limit'] : 30,
                     ],
                 ],
-                'r' => 'mtop.alimusic.search.searchservice.searchsongs',
+                'r'     => 'mtop.alimusic.search.searchservice.searchsongs',
             ],
-            'encode' => 'xiami_sign',
-            'format' => 'data.data.songs',
+            'encode'    => 'xiami_sign',
+            'format'    => 'data.data.songs',
         ];
     }
 
@@ -219,22 +214,22 @@ trait Musical
     protected function searchKugou($apiUrl, $keyword, array $option = [], $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'api_ver' => 1,
-                'area_code' => 1,
-                'correct' => 1,
-                'pagesize' => isset($option['limit']) ? $option['limit'] : 30,
-                'plat' => 2,
-                'tag' => 1,
-                'sver' => 5,
-                'showtype' => 10,
-                'page' => isset($option['page']) ? $option['page'] : 1,
-                'keyword' => $keyword,
-                'version' => 8990,
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'api_ver'       => 1,
+                'area_code'     => 1,
+                'correct'       => 1,
+                'pagesize'      => isset($option['limit']) ? $option['limit'] : 30,
+                'plat'          => 2,
+                'tag'           => 1,
+                'sver'          => 5,
+                'showtype'      => 10,
+                'page'          => isset($option['page']) ? $option['page'] : 1,
+                'keyword'       => $keyword,
+                'version'       => 8990,
             ],
-            'format' => 'data.info',
+            'format'    => 'data.info',
         ];
     }
 
@@ -250,19 +245,19 @@ trait Musical
     protected function searchBaidu($apiUrl, $keyword, array $option = [], $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'from' => 'qianqianmini',
-                'method' => 'baidu.ting.search.merge',
-                'isNew' => 1,
-                'platform' => 'darwin',
-                'page_no' => isset($option['page']) ? $option['page'] : 1,
-                'query' => $keyword,
-                'version' => '11.2.1',
-                'page_size' => isset($option['limit']) ? $option['limit'] : 30,
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'from'          => 'qianqianmini',
+                'method'        => 'baidu.ting.search.merge',
+                'isNew'         => 1,
+                'platform'      => 'darwin',
+                'page_no'       => isset($option['page']) ? $option['page'] : 1,
+                'query'         => $keyword,
+                'version'       => '11.2.1',
+                'page_size'     => isset($option['limit']) ? $option['limit'] : 30,
             ],
-            'format' => 'result.song_info.song_list',
+            'format'    => 'result.song_info.song_list',
         ];
     }
 
@@ -277,13 +272,13 @@ trait Musical
     protected function songNetease($apiUrl, $id, $method = 'POST')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'c' => '[{"id":' . $id . ',"v":0}]',
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'c'         => '[{"id":' . $id . ',"v":0}]',
             ],
-            'encode' => 'netease_AESCBC',
-            'format' => 'songs',
+            'encode'    => 'netease_AESCBC',
+            'format'    => 'songs',
         ];
     }
 
@@ -298,14 +293,14 @@ trait Musical
     protected function songTencent($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'songmid' => $id,
-                'platform' => 'yqq',
-                'format' => 'json',
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'songmid'       => $id,
+                'platform'      => 'yqq',
+                'format'        => 'json',
             ],
-            'format' => 'data',
+            'format'    => 'data',
         ];
     }
 
@@ -320,16 +315,16 @@ trait Musical
     protected function songXiami($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'data' => [
-                    'songId' => $id,
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'data'          => [
+                    'songId'    => $id,
                 ],
-                'r' => 'mtop.alimusic.music.songservice.getsongdetail',
+                'r'     => 'mtop.alimusic.music.songservice.getsongdetail',
             ],
-            'encode' => 'xiami_sign',
-            'format' => 'data.data.songDetail',
+            'encode'    => 'xiami_sign',
+            'format'    => 'data.data.songDetail',
         ];
     }
 
@@ -344,14 +339,14 @@ trait Musical
     protected function songKugou($apiUrl, $id, $method = 'POST')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'cmd' => 'playInfo',
-                'hash' => $id,
-                'from' => 'mkugou',
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'cmd'       => 'playInfo',
+                'hash'      => $id,
+                'from'      => 'mkugou',
             ],
-            'format' => '',
+            'format'    => '',
         ];
     }
 
@@ -366,18 +361,18 @@ trait Musical
     protected function songBaidu($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'from' => 'qianqianmini',
-                'method' => 'baidu.ting.song.getInfos',
-                'songid' => $id,
-                'res' => 1,
-                'platform' => 'darwin',
-                'version' => '1.0.0',
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'from'          => 'qianqianmini',
+                'method'        => 'baidu.ting.song.getInfos',
+                'songid'        => $id,
+                'res'           => 1,
+                'platform'      => 'darwin',
+                'version'       => '1.0.0',
             ],
-            'encode' => 'baidu_AESCBC',
-            'format' => 'songinfo',
+            'encode'    => 'baidu_AESCBC',
+            'format'    => 'songinfo',
         ];
     }
 
@@ -392,18 +387,18 @@ trait Musical
     protected function albumNetease($apiUrl, $id, $method = 'POST')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl . $id,
-            'body' => [
-                'total' => 'true',
-                'offset' => '0',
-                'id' => $id,
-                'limit' => '1000',
-                'ext' => 'true',
+            'method'    => $method,
+            'url'       => $apiUrl . $id,
+            'body'      => [
+                'total'         => 'true',
+                'offset'        => '0',
+                'id'            => $id,
+                'limit'         => '1000',
+                'ext'           => 'true',
                 'private_cloud' => 'true',
             ],
-            'encode' => 'netease_AESCBC',
-            'format' => 'songs',
+            'encode'    => 'netease_AESCBC',
+            'format'    => 'songs',
         ];
     }
 
@@ -418,15 +413,15 @@ trait Musical
     protected function albumTencent($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'albummid' => $id,
-                'platform' => 'mac',
-                'format' => 'json',
-                'newsong' => 1,
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'albummid'      => $id,
+                'platform'      => 'mac',
+                'format'        => 'json',
+                'newsong'       => 1,
             ],
-            'format' => 'data.getSongInfo',
+            'format'    => 'data.getSongInfo',
         ];
     }
 
@@ -441,16 +436,16 @@ trait Musical
     protected function albumXiami($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'data' => [
-                    'albumId' => $id,
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'data'          => [
+                    'albumId'   => $id,
                 ],
-                'r' => 'mtop.alimusic.music.albumservice.getalbumdetail',
+                'r'     => 'mtop.alimusic.music.albumservice.getalbumdetail',
             ],
-            'encode' => 'xiami_sign',
-            'format' => 'data.data.albumDetail.songs',
+            'encode'    => 'xiami_sign',
+            'format'    => 'data.data.albumDetail.songs',
         ];
     }
 
@@ -465,17 +460,17 @@ trait Musical
     protected function albumKugou($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'albumid' => $id,
-                'area_code' => 1,
-                'plat' => 2,
-                'page' => 1,
-                'pagesize' => -1,
-                'version' => 8990,
+            'method'        => $method,
+            'url'           => $apiUrl,
+            'body'          => [
+                'albumid'           => $id,
+                'area_code'         => 1,
+                'plat'              => 2,
+                'page'              => 1,
+                'pagesize'          => -1,
+                'version'           => 8990,
             ],
-            'format' => 'data.info',
+            'format'        => 'data.info',
         ];
     }
 
@@ -490,16 +485,16 @@ trait Musical
     protected function albumBaidu($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'from' => 'qianqianmini',
-                'method' => 'baidu.ting.album.getAlbumInfo',
-                'album_id' => $id,
-                'platform' => 'darwin',
-                'version' => '11.2.1',
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'from'          => 'qianqianmini',
+                'method'        => 'baidu.ting.album.getAlbumInfo',
+                'album_id'      => $id,
+                'platform'      => 'darwin',
+                'version'       => '11.2.1',
             ],
-            'format' => 'songlist',
+            'format'    => 'songlist',
         ];
     }
 
@@ -515,17 +510,17 @@ trait Musical
     protected function artistNetease($apiUrl, $id, $limit = 50, $method = 'POST')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl . $id,
-            'body' => [
-                'ext' => 'true',
+            'method'    => $method,
+            'url'       => $apiUrl . $id,
+            'body'      => [
+                'ext'           => 'true',
                 'private_cloud' => 'true',
-                'ext' => 'true',
-                'top' => $limit,
-                'id' => $id,
+                'ext'           => 'true',
+                'top'           => $limit,
+                'id'            => $id,
             ],
-            'encode' => 'netease_AESCBC',
-            'format' => 'hotSongs',
+            'encode'    => 'netease_AESCBC',
+            'format'    => 'hotSongs',
         ];
     }
 
@@ -541,17 +536,17 @@ trait Musical
     protected function artistTencent($apiUrl, $id, $limit = 50, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'singermid' => $id,
-                'begin' => 0,
-                'num' => $limit,
-                'order' => 'listen',
-                'platform' => 'mac',
-                'newsong' => 1,
+            'method'        => $method,
+            'url'           => $apiUrl,
+            'body'          => [
+                'singermid'         => $id,
+                'begin'             => 0,
+                'num'               => $limit,
+                'order'             => 'listen',
+                'platform'          => 'mac',
+                'newsong'           => 1,
             ],
-            'format' => 'data.list',
+            'format'        => 'data.list',
         ];
     }
 
@@ -567,20 +562,20 @@ trait Musical
     protected function artistXiami($apiUrl, $id, $limit = 50, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'data' => [
-                    'artistId' => $id,
-                    'pagingVO' => [
-                        'page' => 1,
-                        'pageSize' => $limit,
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'data'  => [
+                    'artistId'      => $id,
+                    'pagingVO'      => [
+                        'page'          => 1,
+                        'pageSize'      => $limit,
                     ],
                 ],
-                'r' => 'mtop.alimusic.music.songservice.getartistsongs',
+                'r'     => 'mtop.alimusic.music.songservice.getartistsongs',
             ],
-            'encode' => 'xiami_sign',
-            'format' => 'data.data.songs',
+            'encode'    => 'xiami_sign',
+            'format'    => 'data.data.songs',
         ];
     }
 
@@ -596,17 +591,17 @@ trait Musical
     protected function artistKugou($apiUrl, $id, $limit = 50, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'singerid' => $id,
-                'area_code' => 1,
-                'page' => 1,
-                'plat' => 0,
-                'pagesize' => $limit,
-                'version' => 8990,
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'singerid'      => $id,
+                'area_code'     => 1,
+                'page'          => 1,
+                'plat'          => 0,
+                'pagesize'      => $limit,
+                'version'       => 8990,
             ],
-            'format' => 'data.info',
+            'format'    => 'data.info',
         ];
     }
 
@@ -622,19 +617,19 @@ trait Musical
     protected function artistBaidu($apiUrl, $id, $limit = 50, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'from' => 'qianqianmini',
-                'method' => 'baidu.ting.artist.getSongList',
-                'artistid' => $id,
-                'limits' => $limit,
-                'platform' => 'darwin',
-                'offset' => 0,
-                'tinguid' => 0,
-                'version' => '11.2.1',
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'from'          => 'qianqianmini',
+                'method'        => 'baidu.ting.artist.getSongList',
+                'artistid'      => $id,
+                'limits'        => $limit,
+                'platform'      => 'darwin',
+                'offset'        => 0,
+                'tinguid'       => 0,
+                'version'       => '11.2.1',
             ],
-            'format' => 'songlist',
+            'format'    => 'songlist',
         ];
     }
 
@@ -649,16 +644,16 @@ trait Musical
     protected function playlistNetease($apiUrl, $id, $method = 'POST')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                's' => '0',
-                'id' => $id,
-                'n' => '1000',
-                't' => '0',
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                's'             => '0',
+                'id'            => $id,
+                'n'             => '1000',
+                't'             => '0',
             ],
-            'encode' => 'netease_AESCBC',
-            'format' => 'playlist.tracks',
+            'encode'    => 'netease_AESCBC',
+            'format'    => 'playlist.tracks',
         ];
     }
 
@@ -673,15 +668,15 @@ trait Musical
     protected function playlistTencent($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'id' => $id,
-                'format' => 'json',
-                'newsong' => 1,
-                'platform' => 'jqspaframe.json',
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'id'            => $id,
+                'format'        => 'json',
+                'newsong'       => 1,
+                'platform'      => 'jqspaframe.json',
             ],
-            'format' => 'data.cdlist.0.songlist',
+            'format'    => 'data.cdlist.0.songlist',
         ];
     }
 

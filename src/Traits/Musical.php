@@ -319,7 +319,7 @@ trait Musical
             'url'       => $apiUrl,
             'body'      => [
                 'data'          => [
-                    'songId'    => $id,
+                    'songId'        => $id,
                 ],
                 'r'     => 'mtop.alimusic.music.songservice.getsongdetail',
             ],
@@ -440,7 +440,7 @@ trait Musical
             'url'       => $apiUrl,
             'body'      => [
                 'data'          => [
-                    'albumId'   => $id,
+                    'albumId'       => $id,
                 ],
                 'r'     => 'mtop.alimusic.music.albumservice.getalbumdetail',
             ],
@@ -691,21 +691,21 @@ trait Musical
     protected function playlistXiami($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'data' => [
-                    'listId' => $id,
-                    'isFullTags' => false,
-                    'pagingVO' => [
-                        'page' => 1,
-                        'pageSize' => 1000,
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'data'          => [
+                    'listId'        => $id,
+                    'isFullTags'    => false,
+                    'pagingVO'      => [
+                        'page'          => 1,
+                        'pageSize'      => 1000,
                     ],
                 ],
-                'r' => 'mtop.alimusic.music.list.collectservice.getcollectdetail',
+                'r'     => 'mtop.alimusic.music.list.collectservice.getcollectdetail',
             ],
-            'encode' => 'xiami_sign',
-            'format' => 'data.data.collectDetail.songs',
+            'encode'    => 'xiami_sign',
+            'format'    => 'data.data.collectDetail.songs',
         ];
     }
 
@@ -720,17 +720,17 @@ trait Musical
     protected function playlistKugou($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'specialid' => $id,
-                'area_code' => 1,
-                'page' => 1,
-                'plat' => 2,
-                'pagesize' => -1,
-                'version' => 8990,
+            'method'        => $method,
+            'url'           => $apiUrl,
+            'body'          => [
+                'specialid'         => $id,
+                'area_code'         => 1,
+                'page'              => 1,
+                'plat'              => 2,
+                'pagesize'          => -1,
+                'version'           => 8990,
             ],
-            'format' => 'data.info',
+            'format'        => 'data.info',
         ];
     }
 
@@ -745,16 +745,16 @@ trait Musical
     protected function playlistBaidu($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'from' => 'qianqianmini',
-                'method' => 'baidu.ting.diy.gedanInfo',
-                'listid' => $id,
-                'platform' => 'darwin',
-                'version' => '11.2.1',
+            'method'        => $method,
+            'url'           => $apiUrl,
+            'body'          => [
+                'from'              => 'qianqianmini',
+                'method'            => 'baidu.ting.diy.gedanInfo',
+                'listid'            => $id,
+                'platform'          => 'darwin',
+                'version'           => '11.2.1',
             ],
-            'format' => 'content',
+            'format'        => 'content',
         ];
     }
 
@@ -770,14 +770,14 @@ trait Musical
     protected function playurlNetease($apiUrl, $id, $br = 320, $method = 'POST')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'ids' => [$id],
-                'br' => $br * 1000,
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'ids'       => [$id],
+                'br'        => $br * 1000,
             ],
-            'encode' => 'netease_AESCBC',
-            'decode' => 'netease_url',
+            'encode'    => 'netease_AESCBC',
+            'decode'    => 'netease_url',
         ];
     }
 
@@ -792,14 +792,14 @@ trait Musical
     protected function playurlTencent($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'songmid' => $id,
-                'platform' => 'yqq',
-                'format' => 'json',
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'songmid'       => $id,
+                'platform'      => 'yqq',
+                'format'        => 'json',
             ],
-            'decode' => 'tencent_url',
+            'decode'    => 'tencent_url',
         ];
     }
 
@@ -814,16 +814,16 @@ trait Musical
     protected function playurlXiami($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'data' => [
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'data'  => [
                     'songIds' => [$id],
                 ],
-                'r' => 'mtop.alimusic.music.songservice.getsongs',
+                'r'     => 'mtop.alimusic.music.songservice.getsongs',
             ],
-            'encode' => 'xiami_sign',
-            'decode' => 'xiami_url',
+            'encode'    => 'xiami_sign',
+            'decode'    => 'xiami_url',
         ];
     }
 
@@ -838,28 +838,28 @@ trait Musical
     protected function playurlKugou($apiUrl, $id, $method = 'POST')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => json_encode(
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => json_encode(
                 [
-                    'relate' => 1,
-                    'userid' => '0',
-                    'vip' => 0,
-                    'appid' => 1000,
-                    'token' => '',
-                    'behavior' => 'download',
-                    'area_code' => '1',
-                    'clientver' => '8990',
-                    'resource' => [
+                    'relate'        => 1,
+                    'userid'        => '0',
+                    'vip'           => 0,
+                    'appid'         => 1000,
+                    'token'         => '',
+                    'behavior'      => 'download',
+                    'area_code'     => '1',
+                    'clientver'     => '8990',
+                    'resource'      => [
                         [
-                            'id' => 0,
-                            'type' => 'audio',
-                            'hash' => $id,
+                            'id'        => 0,
+                            'type'      => 'audio',
+                            'hash'      => $id,
                         ]
                     ]
                 ]
             ),
-            'decode' => 'kugou_url',
+            'decode'    => 'kugou_url',
         ];
     }
 
@@ -874,18 +874,18 @@ trait Musical
     protected function playurlBaidu($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'from' => 'qianqianmini',
-                'method' => 'baidu.ting.song.getInfos',
-                'songid' => $id,
-                'res' => 1,
-                'platform' => 'darwin',
-                'version' => '1.0.0',
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'from'          => 'qianqianmini',
+                'method'        => 'baidu.ting.song.getInfos',
+                'songid'        => $id,
+                'res'           => 1,
+                'platform'      => 'darwin',
+                'version'       => '1.0.0',
             ],
-            'encode' => 'baidu_AESCBC',
-            'decode' => 'baidu_url',
+            'encode'    => 'baidu_AESCBC',
+            'decode'    => 'baidu_url',
         ];
     }
 
@@ -900,17 +900,17 @@ trait Musical
     protected function lyricNetease($apiUrl, $id, $method = 'POST')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'id' => $id,
-                'os' => 'linux',
-                'lv' => -1,
-                'kv' => -1,
-                'tv' => -1,
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'id'            => $id,
+                'os'            => 'linux',
+                'lv'            => -1,
+                'kv'            => -1,
+                'tv'            => -1,
             ],
-            'encode' => 'netease_AESCBC',
-            'decode' => 'netease_lyric',
+            'encode'    => 'netease_AESCBC',
+            'decode'    => 'netease_lyric',
         ];
     }
 
@@ -925,13 +925,13 @@ trait Musical
     protected function lyricTencent($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'songmid' => $id,
-                'g_tk' => '5381',
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'songmid'   => $id,
+                'g_tk'      => '5381',
             ],
-            'decode' => 'tencent_lyric',
+            'decode'    => 'tencent_lyric',
         ];
     }
 
@@ -946,16 +946,16 @@ trait Musical
     protected function lyricXiami($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'data' => [
-                    'songId' => $id,
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'data'      => [
+                    'songId'    => $id,
                 ],
-                'r' => 'mtop.alimusic.music.lyricservice.getsonglyrics',
+                'r'     => 'mtop.alimusic.music.lyricservice.getsonglyrics',
             ],
-            'encode' => 'xiami_sign',
-            'decode' => 'xiami_lyric',
+            'encode'    => 'xiami_sign',
+            'decode'    => 'xiami_lyric',
         ];
     }
 
@@ -970,16 +970,16 @@ trait Musical
     protected function lyricKugou($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'keyword' => '%20-%20',
-                'ver' => 1,
-                'hash' => $id,
-                'client' => 'mobi',
-                'man' => 'yes',
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'keyword'   => '%20-%20',
+                'ver'       => 1,
+                'hash'      => $id,
+                'client'    => 'mobi',
+                'man'       => 'yes',
             ],
-            'decode' => 'kugou_lyric',
+            'decode'    => 'kugou_lyric',
         ];
     }
 
@@ -994,16 +994,16 @@ trait Musical
     protected function lyricBaidu($apiUrl, $id, $method = 'GET')
     {
         return [
-            'method' => $method,
-            'url' => $apiUrl,
-            'body' => [
-                'from' => 'qianqianmini',
-                'method' => 'baidu.ting.song.lry',
-                'songid' => $id,
-                'platform' => 'darwin',
-                'version' => '1.0.0',
+            'method'    => $method,
+            'url'       => $apiUrl,
+            'body'      => [
+                'from'          => 'qianqianmini',
+                'method'        => 'baidu.ting.song.lry',
+                'songid'        => $id,
+                'platform'      => 'darwin',
+                'version'       => '1.0.0',
             ],
-            'decode' => 'baidu_lyric',
+            'decode'    => 'baidu_lyric',
         ];
     }
 
@@ -1221,10 +1221,10 @@ trait Musical
         curl_close($curl);
 
         return [
-            'raw' => $raw,
-            'info' => $info,
-            'error' => $error,
-            'status' => $status
+            'raw'       =>  $raw,
+            'info'      =>  $info,
+            'error'     =>  $error,
+            'status'    =>  $status
         ];
     }
 
@@ -1323,15 +1323,15 @@ trait Musical
         $t = time() * 1000;
         $sign = md5(sprintf('%s&%s&%s&%s', $token, $t, $appkey, $data));
         $api['body'] = [
-            'appKey' => $appkey,
-            't' => $t,
-            'dataType' => 'json',
-            'data' => $data,
-            'api' => $api['body']['r'],
-            'v' => '1.0',
-            'type' => 'originaljson',
-            'sign' => $sign,
-            'cookie' => $cookie
+            'appKey'    =>  $appkey,
+            't'         =>  $t,
+            'dataType'  =>  'json',
+            'data'      =>  $data,
+            'api'       =>  $api['body']['r'],
+            'v'         =>  '1.0',
+            'type'      =>  'originaljson',
+            'sign'      =>  $sign,
+            'cookie'    =>  $cookie
         ];
 
         return $api;
@@ -1413,16 +1413,16 @@ trait Musical
 
         $payload = [
             'req_0' => [
-                'module' => 'vkey.GetVkeyServer',
-                'method' => 'CgiGetVkey',
-                'param' => [
-                    'guid' => (string) $guid,
-                    'songmid' => [],
-                    'filename' => [],
-                    'songtype' => [],
-                    'uin' => '0',
+                'module'    => 'vkey.GetVkeyServer',
+                'method'    => 'CgiGetVkey',
+                'param'     => [
+                    'guid'      => (string) $guid,
+                    'songmid'   => [],
+                    'filename'  => [],
+                    'songtype'  => [],
+                    'uin'       => '0',
                     'loginflag' => 1,
-                    'platform' => '20',
+                    'platform'  => '20',
                 ],
             ],
         ];
@@ -1434,13 +1434,13 @@ trait Musical
         }
 
         $api = [
-            'method' => 'GET',
-            'url' => 'https://u.y.qq.com/cgi-bin/musicu.fcg',
-            'body' => [
-                'format' => 'json',
-                'platform' => 'yqq.json',
-                'needNewCode' => 0,
-                'data' => json_encode($payload),
+            'method'    => 'GET',
+            'url'       => 'https://u.y.qq.com/cgi-bin/musicu.fcg',
+            'body'      => [
+                'format'        => 'json',
+                'platform'      => 'yqq.json',
+                'needNewCode'   => 0,
+                'data'          => json_encode($payload),
             ],
         ];
         $response = json_decode(API::getInstance()->exec($api), true);
@@ -1501,9 +1501,9 @@ trait Musical
         }
         if (! isset($url['url'])) {
             $url = [
-                'url' => '',
-                'size' => 0,
-                'br' => -1,
+                'url'   => '',
+                'size'  => 0,
+                'br'    => -1,
             ];
         }
 
@@ -1526,33 +1526,33 @@ trait Musical
         foreach ($data['data'][0]['relate_goods'] as $vo) {
             if ($vo['info']['bitrate'] <= array_get($data, 'api.br') && $vo['info']['bitrate'] > $max) {
                 $api = [
-                    'method' => 'GET',
-                    'url' => 'http://trackercdn.kugou.com/i/v2/',
-                    'body' => [
-                        'hash' => $vo['hash'],
-                        'key' => md5($vo['hash'] . 'kgcloudv2'),
-                        'pid' => 3,
-                        'behavior' => 'play',
-                        'cmd' => '25',
-                        'version' => 8990,
+                    'method'    => 'GET',
+                    'url'       => 'http://trackercdn.kugou.com/i/v2/',
+                    'body'      => [
+                        'hash'      => $vo['hash'],
+                        'key'       => md5($vo['hash'] . 'kgcloudv2'),
+                        'pid'       => 3,
+                        'behavior'  => 'play',
+                        'cmd'       => '25',
+                        'version'   => 8990,
                     ],
                 ];
                 $t = json_decode(API::getInstance()->exec($api), true);
                 if (isset($t['url'])) {
                     $max = $t['bitRate'] / 1000;
                     $url = [
-                        'url' => reset($t['url']),
-                        'size' => $t['fileSize'],
-                        'br' => $t['bitRate'] / 1000,
+                        'url'   => reset($t['url']),
+                        'size'  => $t['fileSize'],
+                        'br'    => $t['bitRate'] / 1000,
                     ];
                 }
             }
         }
         if (!isset($url['url'])) {
             $url = [
-                'url' => '',
-                'size' => 0,
-                'br' => -1,
+                'url'   => '',
+                'size'  => 0,
+                'br'    => -1,
             ];
         }
 
@@ -1576,16 +1576,16 @@ trait Musical
             foreach ($data['songurl']['url'] as $vo) {
                 if ($vo['file_bitrate'] <= array_get($data, 'api.br') && $vo['file_bitrate'] > $max) {
                     $url = [
-                        'url' => $vo['file_link'],
-                        'br' => $vo['file_bitrate'],
+                        'url'   => $vo['file_link'],
+                        'br'    => $vo['file_bitrate'],
                     ];
                 }
             }
         }
         if (! isset($url['url'])) {
             $url = [
-                'url' => '',
-                'br' => -1,
+                'url'   => '',
+                'br'    => -1,
             ];
         }
 
@@ -1652,14 +1652,14 @@ trait Musical
                 ];
             } else {
                 $arr = [
-                    'lyric' => $data,
-                    'tlyric' => '',
+                    'lyric'     => $data,
+                    'tlyric'    => '',
                 ];
             }
         } else {
             $arr = [
-                'lyric' => '',
-                'tlyric' => '',
+                'lyric'     => '',
+                'tlyric'    => '',
             ];
         }
 
@@ -1676,21 +1676,21 @@ trait Musical
     {
         $result = json_decode($result, true);
         $api = [
-            'method' => 'GET',
-            'url' => 'http://lyrics.kugou.com/download',
-            'body' => [
-                'charset' => 'utf8',
-                'accesskey' => $result['candidates'][0]['accesskey'],
-                'id' => $result['candidates'][0]['id'],
-                'client' => 'mobi',
-                'fmt' => 'lrc',
-                'ver' => 1,
+            'method'    => 'GET',
+            'url'       => 'http://lyrics.kugou.com/download',
+            'body'      => [
+                'charset'       => 'utf8',
+                'accesskey'     => $result['candidates'][0]['accesskey'],
+                'id'            => $result['candidates'][0]['id'],
+                'client'        => 'mobi',
+                'fmt'           => 'lrc',
+                'ver'           => 1,
             ],
         ];
         $data = json_decode($this->exec($api), true);
         $arr = [
-            'lyric' => base64_decode($data['content']),
-            'tlyric' => '',
+            'lyric'     => base64_decode($data['content']),
+            'tlyric'    => '',
         ];
 
         return json_encode($arr);
@@ -1706,8 +1706,8 @@ trait Musical
     {
         $result = json_decode($result, true);
         $data = [
-            'lyric' => isset($result['lrcContent']) ? $result['lrcContent'] : '',
-            'tlyric' => '',
+            'lyric'     => isset($result['lrcContent']) ? $result['lrcContent'] : '',
+            'tlyric'    => '',
         ];
 
         return json_encode($data);
@@ -1722,14 +1722,14 @@ trait Musical
     protected function format_netease($data)
     {
         $result = [
-            'id' => $data['id'],
-            'name' => $data['name'],
-            'artist' => [],
-            'album' => $data['al']['name'],
-            'pic_id' => isset($data['al']['pic_str']) ? $data['al']['pic_str'] : $data['al']['pic'],
-            'playurl_id' => $data['id'],
-            'lyric_id' => $data['id'],
-            'source' => API::SITE_NETEASE,
+            'id'            =>  $data['id'],
+            'name'          =>  $data['name'],
+            'artist'        =>  [],
+            'album'         =>  $data['al']['name'],
+            'pic_id'        =>  isset($data['al']['pic_str']) ? $data['al']['pic_str'] : $data['al']['pic'],
+            'playurl_id'    =>  $data['id'],
+            'lyric_id'      =>  $data['id'],
+            'source'        =>  API::SITE_NETEASE,
         ];
         if (isset($data['al']['picUrl'])) {
             preg_match('/\/(\d+)\./', $data['al']['picUrl'], $match);
@@ -1754,14 +1754,14 @@ trait Musical
             $data = $data['musicData'];
         }
         $result = [
-            'id' => $data['mid'],
-            'name' => $data['name'],
-            'artist' => [],
-            'album' => trim($data['album']['title']),
-            'pic_id' => $data['album']['mid'],
-            'playurl_id' => $data['mid'],
-            'lyric_id' => $data['mid'],
-            'source' => API::SITE_TENCENT,
+            'id'            =>  $data['mid'],
+            'name'          =>  $data['name'],
+            'artist'        =>  [],
+            'album'         =>  trim($data['album']['title']),
+            'pic_id'        =>  $data['album']['mid'],
+            'playurl_id'    =>  $data['mid'],
+            'lyric_id'      =>  $data['mid'],
+            'source'        =>  API::SITE_TENCENT,
         ];
         foreach ($data['singer'] as $vo) {
             $result['artist'][] = $vo['name'];
@@ -1779,14 +1779,14 @@ trait Musical
     protected function format_xiami($data)
     {
         $result = [
-            'id' => $data['songId'],
-            'name' => $data['songName'],
-            'artist' => [],
-            'album' => $data['albumName'],
-            'pic_id' => $data['songId'],
-            'playurl_id' => $data['songId'],
-            'lyric_id' => $data['songId'],
-            'source' => API::SITE_XIAMI,
+            'id'        => $data['songId'],
+            'name'      => $data['songName'],
+            'artist'    => [],
+            'album'     => $data['albumName'],
+            'pic_id'    => $data['songId'],
+            'playurl_id'=> $data['songId'],
+            'lyric_id'  => $data['songId'],
+            'source'    => API::SITE_XIAMI,
         ];
         foreach ($data['singerVOs'] as $vo) {
             $result['artist'][] = $vo['artistName'];
@@ -1804,14 +1804,14 @@ trait Musical
     protected function format_kugou($data)
     {
         $result = [
-            'id' => $data['hash'],
-            'name' => isset($data['filename']) ? $data['filename'] : $data['fileName'],
-            'artist' => [],
-            'album' => isset($data['album_name']) ? $data['album_name'] : '',
-            'playurl_id' => $data['hash'],
-            'pic_id' => $data['hash'],
-            'lyric_id' => $data['hash'],
-            'source' => API::SITE_KUGOU,
+            'id'        => $data['hash'],
+            'name'      => isset($data['filename']) ? $data['filename'] : $data['fileName'],
+            'artist'    => [],
+            'album'     => isset($data['album_name']) ? $data['album_name'] : '',
+            'playurl_id'=> $data['hash'],
+            'pic_id'    => $data['hash'],
+            'lyric_id'  => $data['hash'],
+            'source'    => API::SITE_KUGOU,
         ];
         list($result['artist'], $result['name']) = explode(' - ', $result['name'], 2);
         $result['artist'] = explode('、', $result['artist']);
@@ -1828,14 +1828,14 @@ trait Musical
     protected function format_baidu($data)
     {
         return [
-            'id' => $data['song_id'],
-            'name' => $data['title'],
-            'artist' => explode(',', $data['author']),
-            'album' => $data['album_title'],
-            'pic_id' => $data['song_id'],
-            'playurl_id' => $data['song_id'],
-            'lyric_id' => $data['song_id'],
-            'source' => self::SITE_BAIDU,
+            'id'        => $data['song_id'],
+            'name'      => $data['title'],
+            'artist'    => explode(',', $data['author']),
+            'album'     => $data['album_title'],
+            'pic_id'    => $data['song_id'],
+            'playurl_id'=> $data['song_id'],
+            'lyric_id'  => $data['song_id'],
+            'source'    => self::SITE_BAIDU,
         ];
     }
 }

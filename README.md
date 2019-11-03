@@ -33,15 +33,15 @@ namespace App\Http\Controllers;
 use ShugaChara\Music\API;
 
 // 直接调用底层API
-$r = API::getInstance()->setSite('xiami')->setFormat(true);
-dump($r->search('生而为人'));
-$r->setFormat(false);
-dd($r->artist('2110488326'));
+$api = API::getInstance()->setSite('xiami')->setFormat(true);
+dump($api->search('生而为人'));
+$api->setFormat(false);
+dump($api->artist('2110488326'));
 
 // 全网 搜索/下载
-$r = Music::getInstance()->search('生而为人');
-dump($r);
-dd(Music::getInstance()->download($r[0]));
+$music = Music::getInstance()->search('生而为人');
+dump($music);
+dd(Music::getInstance()->download($music[0]));
 ```
 
 ## 更新日志

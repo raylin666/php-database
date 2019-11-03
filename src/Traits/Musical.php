@@ -11,6 +11,7 @@
 
 namespace ShugaChara\Music\Traits;
 
+use ShugaChara\Core\Helpers;
 use ShugaChara\Music\API;
 
 /**
@@ -1447,7 +1448,7 @@ trait Musical
         $vkeys = $response['req_0']['data']['midurlinfo'];
 
         foreach ($type as $index => $vo) {
-            if ($data['data'][0]['file'][$vo[0]] && $vo[1] <= array_get($data, 'api.br')) {
+            if ($data['data'][0]['file'][$vo[0]] && $vo[1] <= Helpers::array_get($data, 'api.br')) {
                 if (! empty($vkeys[$index]['vkey'])) {
                     $url = [
                         'url' => $response['req_0']['data']['sip'][0] . $vkeys[$index]['purl'],
@@ -1490,7 +1491,7 @@ trait Musical
         ];
         $max = 0;
         foreach ($data['data']['data']['songs'][0]['listenFiles'] as $vo) {
-            if ($type[$vo['quality']] <= array_get($data, 'api.br') && $type[$vo['quality']] > $max) {
+            if ($type[$vo['quality']] <= Helpers::array_get($data, 'api.br') && $type[$vo['quality']] > $max) {
                 $max = $type[$vo['quality']];
                 $url = [
                     'url' => $vo['listenFile'],
@@ -1524,7 +1525,7 @@ trait Musical
 
         $max = 0;
         foreach ($data['data'][0]['relate_goods'] as $vo) {
-            if ($vo['info']['bitrate'] <= array_get($data, 'api.br') && $vo['info']['bitrate'] > $max) {
+            if ($vo['info']['bitrate'] <= Helpers::array_get($data, 'api.br') && $vo['info']['bitrate'] > $max) {
                 $api = [
                     'method'    => 'GET',
                     'url'       => 'http://trackercdn.kugou.com/i/v2/',
@@ -1574,7 +1575,7 @@ trait Musical
         $max = 0;
         if (isset($data['songurl']['url'])) {
             foreach ($data['songurl']['url'] as $vo) {
-                if ($vo['file_bitrate'] <= array_get($data, 'api.br') && $vo['file_bitrate'] > $max) {
+                if ($vo['file_bitrate'] <= Helpers::array_get($data, 'api.br') && $vo['file_bitrate'] > $max) {
                     $url = [
                         'url'   => $vo['file_link'],
                         'br'    => $vo['file_bitrate'],

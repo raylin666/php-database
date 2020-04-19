@@ -12,7 +12,6 @@
 namespace ShugaChara\Music;
 
 use GuzzleHttp\Client;
-use ShugaChara\Core\Helpers;
 use ShugaChara\Core\Traits\Singleton;
 use ShugaChara\Music\AbstractInterfaces\MusicInterface;
 
@@ -58,8 +57,8 @@ class Music implements MusicInterface
             }
 
             foreach ($songs as $key => &$song) {
-                $detail = json_decode($apiServer->setFormat(true)->playurl(Helpers::array_get($song, 'playurl_id')), true);
-                if (Helpers::array_get($detail, 'url')) {
+                $detail = json_decode($apiServer->setFormat(true)->playurl(ArrayHelper::get($song, 'playurl_id')), true);
+                if (ArrayHelper::get($detail, 'url')) {
                     $song = array_merge($song, $detail);
                 } else {
                     unset($songs[$key]);

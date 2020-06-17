@@ -13,6 +13,7 @@ namespace ShugaChara\Music;
 
 use GuzzleHttp\Client;
 use ShugaChara\Core\Traits\Singleton;
+use ShugaChara\Core\Utils\Helper\ArrayHelper;
 use ShugaChara\Music\AbstractInterfaces\MusicInterface;
 
 /**

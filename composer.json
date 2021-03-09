@@ -1,43 +1,44 @@
 {
-    "name": "shugachara/music",
-    "description": "MUSIC - 网易云、 腾讯QQ音乐、百度、酷狗、虾米等平台接口",
-    "keywords": [
-        "sdk",
-        "music",
-        "shugachara",
-        "play"
-    ],
-    "type": "library",
-    "license": "MIT",
-    "homepage": "https://github.com/shugachara/music",
-    "authors": [
-        {
-            "name": "shugachara",
-            "email": "1099013371@qq.com"
-        }
-    ],
-    "require": {
-        "php": ">=7.0",
-        "shugachara/core": "~2.0",
-        "guzzlehttp/guzzle": "^6.3.3"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "~6.0"
-    },
-    "autoload": {
-        "files": [
-
-        ],
-        "psr-4": {
-            "ShugaChara\\Music\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "ShugaChara\\Tests\\": "tests/"
-        }
-    },
-    "repositories": [
-
-    ]
+  "name": "raylin666/database",
+  "type": "library",
+  "description": "The Swoole Pool Database package.",
+  "keywords" : [
+    "php",
+    "coroutine",
+    "mysql",
+    "pdo",
+    "swoole",
+    "database",
+    "pool",
+    "db"
+  ],
+  "homepage": "https://github.com/raylin666/database",
+  "license" : "Apache-2.0",
+  "authors": [
+    {
+      "name": "raylin666",
+      "email": "1099013371@qq.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.3",
+    "ext-swoole": ">=4.4.5",
+    "ext-json": ">=1.0",
+    "ext-openssl": ">=7.3",
+    "raylin666/utils": "^1.0",
+    "raylin666/pool": "^1.0",
+    "illuminate/database": "^8.8.0",
+    "illuminate/events": "^8.8.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Raylin666\\Database\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {}
+  },
+  "extra": {},
+  "packages": {},
+  "packages-dev": {}
 }

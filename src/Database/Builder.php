@@ -9,29 +9,15 @@
 // | Author: kaka梦很美 <1099013371@qq.com>
 // +----------------------------------------------------------------------
 
-namespace ShugaChara\Music\AbstractInterfaces;
+namespace Raylin666\Database\Database;
+
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
 /**
- * Interface MusicInterface
- *
- * @package ShugaChara\Music\AbstractInterfaces
+ * Class Builder
+ * @package Raylin666\Database\Database
  */
-interface MusicInterface
+class Builder extends EloquentBuilder
 {
-    /**
-     * 搜索音乐
-     *
-     * @param $keyword
-     * @param $platform
-     * @return mixed
-     */
-    public function search($keyword, $platform);
 
-    /**
-     * 下载歌曲
-     *
-     * @param array $song
-     * @return mixed
-     */
-    public function download(array $song);
 }

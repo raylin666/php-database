@@ -1,63 +1,177 @@
-# MUSIC - 网易云、 腾讯QQ音乐、百度、酷狗、虾米等平台接口
+# 数据库 Database Eloquent ORM - 支持 Swoole 协程
 
-[![GitHub release](https://img.shields.io/github/release/shugachara/music.svg)](https://github.com/shugachara/music/releases)
-[![PHP version](https://img.shields.io/badge/php-%3E%207-orange.svg)](https://github.com/php/php-src)
+[![GitHub release](https://img.shields.io/github/release/raylin666/database.svg)](https://github.com/raylin666/database/releases)
+[![PHP version](https://img.shields.io/badge/php-%3E%207.3-orange.svg)](https://github.com/php/php-src)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](#LICENSE)
 
-## 说明
+### 环境要求
 
-经常情况下(特别是个人博客类网站) 需要使用音乐播放,本作者就是其中一个,所以在此开发音乐SDK,方便使用。
+* PHP >=7.3
 
-目前已开放网易云、 腾讯QQ音乐、百度、酷狗、虾米等平台接口。
-
-我将会一直维护该项目, 如果有需要改进的地方，欢迎 issue (包括Bug/建议等)。但数据调用的是各网站的 API 接口，有的接口并不是开放的，随时可能失效，或许不能及时更新最新可用代码，本项目相关代码仅供参考。
-
-## 包地址
-
-[Music](https://packagist.org/packages/shugachara/music)
-
-## 使用方法
-
-**安装**
+### 安装说明
 
 ```
-composer require shugachara/music
+composer require "raylin666/database"
 ```
 
-**调用**
+### 使用方式
+
+如果你用过Laravel、或者用过illuminate/database包,那么使用起来得心应手,因为写法一致。
 
 ```php
 <?php
-namespace App\Http\Controllers;
 
-use ShugaChara\Music\API;
+require_once 'vendor/autoload.php';
 
-// 直接调用底层API
-$api = API::getInstance()->setSite('xiami')->setFormat(true);
-dump($api->search('生而为人'));
-$api->setFormat(false);
-dump($api->artist('2110488326'));
+use Raylin666\Database\DB;
+use Raylin666\Database\Config;
 
-// 全网 搜索/下载
-$music = Music::getInstance()->search('生而为人');
-dump($music);
-dd(Music::getInstance()->download($music[0]));
+/***********************************************
+ * 非常驻内存环境下使用方式 (非Swoole) 
+ ***********************************************/
+
+// 添加数据库配置
+DB::addDbConnection((new Config())
+    ->setDriver('mysql')
+    ->setName('default')
+    ->setTablePrefix('good_')
+    ->setHost('127.0.0.1')
+    ->setPassword('123456')
+    ->setCharset('utf8mb4')
+    ->setUsername('root')
+    ->setDbname('goods_server')
+    ->setPort(3306)
+);
+
+DB::addDbConnection((new Config())
+    ->setDriver('mysql')
+    ->setName('local')
+    ->setTablePrefix('order_')
+    ->setHost('127.0.0.1')
+    ->setPassword('123456')
+    ->setCharset('utf8mb4')
+    ->setUsername('root')
+    ->setDbname('orders_server')
+    ->setPort(3306)
+);
+
+// SQL 日志监听 (如打印SQL日志)
+DB::getDbConnection('default')->getDispatcher()->listen(
+    \Illuminate\Database\Events\QueryExecuted::class,
+    function ($event) {
+        var_dump($event->sql);
+    }
+);
+
+var_dump(DB::table('user')->first());
+var_dump(DB::connection('local')->table('user')->find(1));
+
+class User extends \Raylin666\Database\Model
+{
+    protected $table = 'user';
+}
+
+class LocalUser extends \Raylin666\Database\Model
+{
+    protected $connection = 'local';
+    protected $table = 'user';
+}
+
+var_dump(User::select(['id', 'nickname', 'avatar'])->first()->toArray());
+var_dump(LocalUser::select(['id', 'username', 'avatar'])->first()->toArray());
+
+
+/***********************************************
+ * 常驻内存环境下使用方式 (Swoole, 协程) 
+ ***********************************************/
+
+$dbConfig['default'] = (new Config())
+    ->setDriver('mysql')
+    ->setName('default')
+    ->setTablePrefix('good_')
+    ->setHost('127.0.0.1')
+    ->setPassword('123456')
+    ->setCharset('utf8mb4')
+    ->setUsername('root')
+    ->setDbname('goods_server')
+    ->setPort(3306);
+$dbConfig['default']->getDispatcher()->listen(
+    \Illuminate\Database\Events\QueryExecuted::class,
+    function ($event) {
+        var_dump($event->sql);
+    }
+);
+
+$dbConfig['local'] = (new Config())
+    ->setDriver('mysql')
+    ->setName('local')
+    ->setTablePrefix('order_')
+    ->setHost('127.0.0.1')
+    ->setPassword('123456')
+    ->setCharset('utf8mb4')
+    ->setUsername('root')
+    ->setDbname('orders_server')
+    ->setPort(3306);
+$dbConfig['local']->getDispatcher()->listen(
+        \Illuminate\Database\Events\QueryExecuted::class,
+        function ($event) {
+            var_dump($event->sql);
+        }
+    );
+
+\Swoole\Runtime::enableCoroutine(true, SWOOLE_HOOK_ALL);
+
+$server = new swoole_http_server('127.0.0.1', 10021);
+
+$server->set([
+    'worker_num' => 1,
+]);
+
+$server->on('workerStart', function () use ($dbConfig) {
+    foreach (['default', 'local'] as $connName) {
+        $callback = function () use ($connName, $dbConfig) {
+            $connection =  new \Raylin666\Database\Connection(
+                new \Raylin666\Database\PDO($dbConfig[$connName])
+            );
+            return $connection();
+        };
+
+        $pool = new \Raylin666\Database\Pool\DatabasePool(
+            new \Raylin666\Pool\PoolConfig(
+                $connName,
+                $callback,
+                [
+                    'min_connections' => 5,
+                    'max_connections' => 10,
+                    'wait_timeout' => 60,
+                ])
+        );
+
+        DB::setDatabasePool($connName, $pool);
+    }
+});
+
+$server->on('request', function () {
+    var_dump(DB::table('user')->first());
+    var_dump(DB::connection('local')->table('user')->first());
+
+    for ($i = 0; $i < 1000; $i++) {
+        // 记得使用go时开启协程 \Swoole\Runtime::enableCoroutine(true, SWOOLE_HOOK_ALL)
+        go(function () {
+            $user1 = User::select(['id', 'nickname', 'avatar'])->first()->toArray();
+            $user2 = LocalUser::select(['id as id1', 'username', 'avatar as avatar1'])->first()->toArray();
+            var_dump(array_merge($user1, $user2));
+        });
+    }
+});
+
+$server->start();
+
 ```
 
-## 更新日志
+### 更新日志
 
 请查看 [CHANGELOG.md](CHANGELOG.md)
-
-## 免责声明
-
-1. 本站音频文件来自各网站接口，本站不会修改任何音频文件
-2. 音频版权来自各网站，本站只提供数据查询服务，不提供任何音频存储和贩卖服务
-
-### 贡献
-
-非常欢迎感兴趣，并且愿意参与其中，共同打造更好PHP生态。
-
-* 在你的系统中使用，将遇到的问题 [反馈](https://github.com/shugachara/music/issues)
 
 ### 联系
 

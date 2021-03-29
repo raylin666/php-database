@@ -12,7 +12,6 @@
     "pool",
     "db"
   ],
-  "homepage": "https://github.com/raylin666/database",
   "license" : "Apache-2.0",
   "authors": [
     {

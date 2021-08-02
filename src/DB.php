@@ -63,6 +63,8 @@ class DB extends Manager
                     Coroutine::defer(function () use ($connectionPool) {
                         $connectionPool->release();
                     });
+                } else {
+                    $connectionPool->release();
                 }
             }
         }

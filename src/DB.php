@@ -53,11 +53,13 @@ class DB extends Manager
                 if ($logger = static::getLogger()) {
                     $logger->warning(__CLASS__, [$e->getFile(), $e->getLine(), $e->getMessage()]);
                 }
+                throw new $e;
             } catch (Throwable $e) {
                 // ... Other Write logs
                 if ($logger = static::getLogger()) {
                     $logger->warning(__CLASS__, [$e->getFile(), $e->getLine(), $e->getMessage()]);
                 }
+                throw new $e;
             } finally {
                 if (Coroutine::inCoroutine()) {
                     Coroutine::defer(function () use ($connectionPool) {

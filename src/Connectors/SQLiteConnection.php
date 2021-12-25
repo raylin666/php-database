@@ -9,15 +9,13 @@
 // | Author: kaka梦很美 <1099013371@qq.com>
 // +----------------------------------------------------------------------
 
-namespace Raylin666\Database\Connections;
-
-use Illuminate\Database\PostgresConnection as DatabasePostgresConnection;
+namespace Raylin666\Database\Connectors;
 
 /**
- * Class PostgresConnection
- * @package Raylin666\Database\Connections
+ * Class SQLiteConnection
+ * @package Raylin666\Database\Connectors
  */
-class PostgresConnection extends DatabasePostgresConnection
+class SQLiteConnection extends \Illuminate\Database\SQLiteConnection
 {
 
 }

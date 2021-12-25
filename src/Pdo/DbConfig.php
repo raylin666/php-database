@@ -9,16 +9,16 @@
 // | Author: kaka梦很美 <1099013371@qq.com>
 // +----------------------------------------------------------------------
 
-namespace Raylin666\Database;
+namespace Raylin666\Database\Pdo;
 
 use Illuminate\Events\Dispatcher;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherInterface;
 
 /**
- * Class Config
- * @package Raylin666\Database
+ * Class DbConfig
+ * @package Raylin666\Database\Pdo
  */
-class Config
+class DbConfig
 {
     /**
      * 默认连接名称
@@ -117,6 +117,13 @@ class Config
     protected $options = [];
 
     /**
+     * 重连重试次数
+     * @var int 
+     */
+    protected $retry = 3;
+
+    /**
+     * 数据库事件发布器
      * @var DispatcherInterface
      */
     protected $dispatcher;
@@ -125,7 +132,7 @@ class Config
      * @param string $name
      * @return Config
      */
-    public function setName(string $name): self
+    public function withName(string $name): self
     {
         $this->name = $name;
         return $this;
@@ -144,7 +151,7 @@ class Config
      * @param string $tablePrefix
      * @return Config
      */
-    public function setTablePrefix($tablePrefix = ''): self
+    public function withTablePrefix($tablePrefix = ''): self
     {
         $this->tablePrefix = $tablePrefix;
         return $this;
@@ -164,7 +171,7 @@ class Config
      * @param string $charset
      * @return Config
      */
-    public function setCharset(string $charset): self
+    public function withCharset(string $charset): self
     {
         $this->charset = $charset;
         return $this;
@@ -183,7 +190,7 @@ class Config
      * @param string $collation
      * @return Config
      */
-    public function setCollation(string $collation): self
+    public function withCollation(string $collation): self
     {
         $this->collation = $collation;
         return $this;
@@ -202,7 +209,7 @@ class Config
      * @param string $dbname
      * @return Config
      */
-    public function setDbname(string $dbname): self
+    public function withDbname(string $dbname): self
     {
         $this->dbname = $dbname;
         return $this;
@@ -222,9 +229,9 @@ class Config
      * @param string $driver
      * @return Config
      */
-    public function setDriver(string $driver): self
+    public function withDriver(string $driver): self
     {
-        $this->driver = $driver;
+        in_array($driver, static::getAvailableDrivers()) && $this->driver = $driver;
         return $this;
     }
 
@@ -242,7 +249,7 @@ class Config
      * @param string $host
      * @return Config
      */
-    public function setHost(string $host): self
+    public function withHost(string $host): self
     {
         $this->host = $host;
         return $this;
@@ -262,7 +269,7 @@ class Config
      * @param array $options
      * @return Config
      */
-    public function setOptions(array $options): self
+    public function withOptions(array $options): self
     {
         $this->options = $options;
         return $this;
@@ -282,7 +289,7 @@ class Config
      * @param string $password
      * @return Config
      */
-    public function setPassword(string $password): self
+    public function withPassword(string $password): self
     {
         $this->password = $password;
         return $this;
@@ -302,7 +309,7 @@ class Config
      * @param int $port
      * @return Config
      */
-    public function setPort(int $port): self
+    public function withPort(int $port): self
     {
         $this->port = $port;
         return $this;
@@ -322,7 +329,7 @@ class Config
      * @param string|null $unixSocket
      * @return Config
      */
-    public function setUnixSocket(?string $unixSocket): self
+    public function withUnixSocket(?string $unixSocket): self
     {
         $this->unixSocket = $unixSocket;
         return $this;
@@ -351,7 +358,7 @@ class Config
      * @param string $username
      * @return Config
      */
-    public function setUsername(string $username): self
+    public function withUsername(string $username): self
     {
         $this->username = $username;
         return $this;
@@ -367,10 +374,28 @@ class Config
     }
 
     /**
+     * @param int $count
+     * @return $this
+     */
+    public function withRetry(int $count): self
+    {
+        $this->retry = $count;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRetry(): int
+    {
+        return $this->retry;
+    }
+
+    /**
      * @param DispatcherInterface $dispatcher
      * @return Config
      */
-    public function setDispatcher(DispatcherInterface $dispatcher): self
+    public function withDispatcher(DispatcherInterface $dispatcher): self
     {
         $this->dispatcher = $dispatcher;
         return $this;
@@ -381,10 +406,7 @@ class Config
      */
     public function getDispatcher(): DispatcherInterface
     {
-        if (! $this->dispatcher) {
-            $this->dispatcher = new Dispatcher();
-        }
-
+        (! $this->dispatcher) && $this->dispatcher = make(Dispatcher::class);
         return $this->dispatcher;
     }
 

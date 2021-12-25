@@ -9,15 +9,15 @@
 // | Author: kaka梦很美 <1099013371@qq.com>
 // +----------------------------------------------------------------------
 
-namespace Raylin666\Database\Connections;
+namespace Raylin666\Database\Database;
 
-use Illuminate\Database\SQLiteConnection as DatabaseSQLiteConnection;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
 /**
- * Class SQLiteConnection
- * @package Raylin666\Database\Connections
+ * Class QueryBuilder
+ * @package Raylin666\Database\Database
  */
-class SQLiteConnection extends DatabaseSQLiteConnection
+class QueryBuilder extends EloquentBuilder
 {
-
+    
 }

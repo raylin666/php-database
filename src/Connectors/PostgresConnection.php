@@ -9,15 +9,13 @@
 // | Author: kaka梦很美 <1099013371@qq.com>
 // +----------------------------------------------------------------------
 
-namespace Raylin666\Database\Database;
-
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+namespace Raylin666\Database\Connectors;
 
 /**
- * Class Builder
- * @package Raylin666\Database\Database
+ * Class PostgresConnection
+ * @package Raylin666\Database\Connectors
  */
-class Builder extends EloquentBuilder
+class PostgresConnection extends \Illuminate\Database\PostgresConnection
 {
 
 }

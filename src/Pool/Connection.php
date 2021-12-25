@@ -11,14 +11,13 @@
 
 namespace Raylin666\Database\Pool;
 
-use Raylin666\Pool\Connection as ConnectionPool;
-use Raylin666\Database\Connection as DatabaseConnection;
+use Raylin666\Database\Pdo\Connection as DatabaseConnection;
 
 /**
  * Class Connection
  * @package Raylin666\Database\Pool
  */
-class Connection extends ConnectionPool
+class Connection extends \Raylin666\Pool\Connection
 {
     /**
      * @return mixed|void
@@ -26,7 +25,6 @@ class Connection extends ConnectionPool
     public function connect()
     {
         $connection = ($this->callback)();
-
         if ($connection instanceof DatabaseConnection) {
             $this->connection = $connection->getConnection();
         }

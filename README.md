@@ -1,12 +1,12 @@
 # 数据库 Database Eloquent ORM - 支持 Swoole 协程
 
-[![GitHub release](https://img.shields.io/github/release/raylin666/database.svg)](https://github.com/raylin666/database/releases)
+[![GitHub release](https://img.shields.io/github/release/raylin666/php-database.svg)](https://github.com/raylin666/php-database/releases)
 [![PHP version](https://img.shields.io/badge/php-%3E%207.3-orange.svg)](https://github.com/php/php-src)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](#LICENSE)
 
 ### 环境要求
 
-* PHP >=7.3
+* PHP >= 7.3
 
 ### 安装说明
 
@@ -16,152 +16,118 @@ composer require "raylin666/database"
 
 ### 使用方式
 
-如果你用过Laravel、或者用过illuminate/database包,那么使用起来得心应手,因为写法一致。
+如果你用过 `Laravel`、或者单独用过 `illuminate/database` 包,那么使用起来得心应手,因为写法基本一致。
 
 ```php
 <?php
 
 require_once 'vendor/autoload.php';
 
+use Raylin666\Database\Pdo\DbConfig;
+use Raylin666\Database\Pdo\PDO;
+use Raylin666\Database\Pdo\Connection;
 use Raylin666\Database\DB;
-use Raylin666\Database\Config;
+use Raylin666\Database\Pool\DatabasePool;
+use Raylin666\Pool\PoolConfig;
+use Raylin666\Pool\PoolOption;
+use Raylin666\Database\Model;
+
+// 设置 DB 配置
+$config = (new DbConfig())
+    ->withName('default')
+    ->withHost('127.0.0.1')
+    ->withPort(3306)
+    ->withDbname('im-server')
+    ->withUsername('raylin666')
+    ->withPassword('123456')
+    ->withTablePrefix('im_')
+    ->withOptions([
+        // \PDO::ATTR_CASE => \PDO::CASE_UPPER,    // 将字段名称转换为大写
+    ]);
+// 配置 PDO
+$pdo = new PDO($config);
+// 创建连接
+$connection = (new Connection($pdo))();
+// 设置 SQL 日志监听 (如打印SQL日志)
+$connection->getConnection()->getEventDispatcher()->listen(
+    Illuminate\Database\Events\QueryExecuted::class,
+    function ($event) {
+        var_dump($event->sql);
+    }
+);
+
+// 连接池模式
+$poolOption = new PoolOption();
+$poolOption->withMinConnections(10)
+    ->withMaxConnections(100);
+$poolConfig = new PoolConfig('local', function () use ($connection) {
+    return $connection;
+}, $poolOption);
+$pool = new DatabasePool($poolConfig);
 
 /***********************************************
  * 非常驻内存环境下使用方式 (非Swoole) 
  ***********************************************/
 
-// 添加数据库配置
-DB::addDbConnection((new Config())
-    ->setDriver('mysql')
-    ->setName('default')
-    ->setTablePrefix('good_')
-    ->setHost('127.0.0.1')
-    ->setPassword('123456')
-    ->setCharset('utf8mb4')
-    ->setUsername('root')
-    ->setDbname('goods_server')
-    ->setPort(3306)
-);
+// 初始化数据库连接配置
+DB::newManagerConnection($connection);
 
-DB::addDbConnection((new Config())
-    ->setDriver('mysql')
-    ->setName('local')
-    ->setTablePrefix('order_')
-    ->setHost('127.0.0.1')
-    ->setPassword('123456')
-    ->setCharset('utf8mb4')
-    ->setUsername('root')
-    ->setDbname('orders_server')
-    ->setPort(3306)
-);
+// 初始化数据库连接配置
+DB::newManagerConnection($pool);
 
-// SQL 日志监听 (如打印SQL日志)
-DB::getDbConnection('default')->getDispatcher()->listen(
-    \Illuminate\Database\Events\QueryExecuted::class,
-    function ($event) {
-        var_dump($event->sql);
-    }
-);
+// 查询 SQL
+DB::connection('default')->table('account')->first();
+DB::connection('local')->table('account')->first();
 
-var_dump(DB::table('user')->first());
-var_dump(DB::connection('local')->table('user')->find(1));
-
-class User extends \Raylin666\Database\Model
+// Model 模型操作
+class Account extends Model
 {
-    protected $table = 'user';
+    protected $connection = 'default';
+
+    protected $table = 'account';
 }
 
-class LocalUser extends \Raylin666\Database\Model
-{
-    protected $connection = 'local';
-    protected $table = 'user';
-}
-
-var_dump(User::select(['id', 'nickname', 'avatar'])->first()->toArray());
-var_dump(LocalUser::select(['id', 'username', 'avatar'])->first()->toArray());
-
+// Model 查询
+Account::where(['id' => 6])->first()->toArray();
 
 /***********************************************
  * 常驻内存环境下使用方式 (Swoole, 协程) 
  ***********************************************/
-
-$dbConfig['default'] = (new Config())
-    ->setDriver('mysql')
-    ->setName('default')
-    ->setTablePrefix('good_')
-    ->setHost('127.0.0.1')
-    ->setPassword('123456')
-    ->setCharset('utf8mb4')
-    ->setUsername('root')
-    ->setDbname('goods_server')
-    ->setPort(3306);
-$dbConfig['default']->getDispatcher()->listen(
-    \Illuminate\Database\Events\QueryExecuted::class,
-    function ($event) {
-        var_dump($event->sql);
-    }
-);
-
-$dbConfig['local'] = (new Config())
-    ->setDriver('mysql')
-    ->setName('local')
-    ->setTablePrefix('order_')
-    ->setHost('127.0.0.1')
-    ->setPassword('123456')
-    ->setCharset('utf8mb4')
-    ->setUsername('root')
-    ->setDbname('orders_server')
-    ->setPort(3306);
-$dbConfig['local']->getDispatcher()->listen(
-        \Illuminate\Database\Events\QueryExecuted::class,
-        function ($event) {
-            var_dump($event->sql);
-        }
-    );
-
-\Swoole\Runtime::enableCoroutine(true, SWOOLE_HOOK_ALL);
-
-$server = new swoole_http_server('127.0.0.1', 10021);
+ 
+$server = new swoole_http_server('127.0.0.1', 9999);
 
 $server->set([
-    'worker_num' => 1,
+    'worker_num' => swoole_cpu_num(),
 ]);
 
-$server->on('workerStart', function () use ($dbConfig) {
-    foreach (['default', 'local'] as $connName) {
-        $callback = function () use ($connName, $dbConfig) {
-            $connection =  new \Raylin666\Database\Connection(
-                new \Raylin666\Database\PDO($dbConfig[$connName])
-            );
-            return $connection();
-        };
+// Swoole\Runtime::enableCoroutine(true, SWOOLE_HOOK_ALL);
 
-        $pool = new \Raylin666\Database\Pool\DatabasePool(
-            new \Raylin666\Pool\PoolConfig(
-                $connName,
-                $callback,
-                [
-                    'min_connections' => 5,
-                    'max_connections' => 10,
-                    'wait_timeout' => 60,
-                ])
-        );
+$server->on('workerStart', function (Swoole\Server $server, int $workerId) use ($pool) {
+    var_dump("进程 $workerId 已启动.");
 
-        DB::setDatabasePool($connName, $pool);
-    }
+    // 初始化数据库连接配置
+    DB::newManagerConnection($pool);
 });
 
-$server->on('request', function () {
-    var_dump(DB::table('user')->first());
-    var_dump(DB::connection('local')->table('user')->first());
-
+$server->on('request', function (Swoole\Http\Request $request, Swoole\Http\Response $response) {
+    $count = 0;
+    // 模拟并发请求
+    $waitGroup = new Swoole\Coroutine\WaitGroup();
     for ($i = 0; $i < 1000; $i++) {
-        // 记得使用go时开启协程 \Swoole\Runtime::enableCoroutine(true, SWOOLE_HOOK_ALL)
-        go(function () {
-            $user1 = User::select(['id', 'nickname', 'avatar'])->first()->toArray();
-            $user2 = LocalUser::select(['id as id1', 'username', 'avatar as avatar1'])->first()->toArray();
-            var_dump(array_merge($user1, $user2));
+        $waitGroup->add();
+        go(function () use ($waitGroup, &$count) {
+            Swoole\Coroutine::defer(function () use ($waitGroup, &$count) {
+                ++$count;
+                $waitGroup->done();
+            });
+
+            // $result = DB::table('account')->inRandomOrder()->first();
+            $result = Account::inRandomOrder()->first();
+            var_dump($result);
         });
+
+        $waitGroup->wait();
+        var_dump('EXEC OK.' . $count);
     }
 });
 

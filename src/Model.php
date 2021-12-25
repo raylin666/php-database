@@ -11,15 +11,13 @@
 
 namespace Raylin666\Database;
 
-use Raylin666\Database\Database\Builder;
-use Raylin666\Database\Database\Model as EloquentModel;
+use Raylin666\Database\Database\Model as DatabaseModel;
 
 /**
  * Class Model
- * @mixin Builder
  * @package Raylin666\Database
  */
-class Model extends EloquentModel
+class Model extends DatabaseModel
 {
 
 }

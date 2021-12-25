@@ -11,88 +11,49 @@
 
 namespace Raylin666\Database;
 
-use Throwable;
-use Raylin666\Utils\Context;
-use Raylin666\Utils\Coroutine\Coroutine;
-use Raylin666\Database\Database\Manager;
-use Illuminate\Database\ConnectionInterface;
-use Raylin666\Database\Exception\DatabaseConnectionException;
+use Raylin666\Database\Contract\DatabasePoolInterface;
+use Raylin666\Database\Database\DbManager;
+use Raylin666\Database\Pdo\Connection;
 
 /**
  * Class DB
+ * @mixin DbManager
  * @package Raylin666\Database
  */
-class DB extends Manager
+class DB
 {
     /**
-     * 连接池连接
-     * @param null $name
-     * @return mixed|null
-     * @throws \Exception
+     * @var DbManager|null
      */
-    protected static function poolConnection($name = null)
+    protected static $dbManager;
+
+    /**
+     * 初始化 DB 连接\连接池管理器
+     * @param DatabasePoolInterface|Connection $connection 内部自动判断是普通连接还是连接池
+     */
+    public static function newManagerConnection($connection)
     {
-        $contextId = static::getConnectionNameContext($name);
-
-        $connection = null;
-        if (Context::has($contextId)) {
-            $connection = Context::get($contextId);
-        }
-
-        if (! $connection instanceof ConnectionInterface) {
-            $connectionPool = static::getDatabasePool($name)->get();
-
-            try {
-                if (! $connection = $connectionPool->getConnection()) {
-                    throw new DatabaseConnectionException('Failed to get `' . $name . '` connection pool connection.');
-                }
-
-                Context::set($contextId, $connection);
-            } catch (DatabaseConnectionException $e) {
-                // ... get connection errors  Write logs
-                if ($logger = static::getLogger()) {
-                    $logger->warning(__CLASS__, [$e->getFile(), $e->getLine(), $e->getMessage()]);
-                }
-                throw new $e;
-            } catch (Throwable $e) {
-                // ... Other Write logs
-                if ($logger = static::getLogger()) {
-                    $logger->warning(__CLASS__, [$e->getFile(), $e->getLine(), $e->getMessage()]);
-                }
-                throw new $e;
-            } finally {
-                if (Coroutine::inCoroutine()) {
-                    Coroutine::defer(function () use ($connectionPool) {
-                        $connectionPool->release();
-                    });
-                } else {
-                    $connectionPool->release();
-                }
-            }
-        }
-
-        return $connection;
+        (! static::$dbManager instanceof DbManager) && static::$dbManager = new DbManager();
+        static::$dbManager->addConnection($connection);
     }
 
     /**
-     * 数据库连接
-     * @param null $name
-     * @return \Illuminate\Database\Connection|mixed|null
-     * @throws \Exception
+     * @param $name
+     * @param $arguments
+     * @return mixed
      */
-    public static function connection($name = null)
+    public function __call($name, $arguments)
     {
-        $name = static::getConnectionName($name);
+        return static::$dbManager->$name(...$arguments);
+    }
 
-        if (static::hasDatabasePool($name)) {
-            return static::poolConnection($name);
-        }
-
-        // 非常驻内存环境下
-        if (static::hasDbConnection($name)) {
-            return static::getDbConnection($name)->getConnection();
-        }
-
-        return parent::connection($name);
+    /**
+     * @param $name
+     * @param $arguments
+     * @return mixed
+     */
+    public static function __callStatic($name, $arguments)
+    {
+        return static::$dbManager->$name(...$arguments);
     }
 }

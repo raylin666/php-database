@@ -19,5 +19,8 @@ use Raylin666\Contract\PoolInterface;
  */
 interface DatabasePoolInterface extends PoolInterface
 {
-
+    /**
+     * @return string
+     */
+    public function getName(): string;
 }

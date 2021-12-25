@@ -9,15 +9,13 @@
 // | Author: kaka梦很美 <1099013371@qq.com>
 // +----------------------------------------------------------------------
 
-namespace Raylin666\Database\Connections;
-
-use Illuminate\Database\MySqlConnection as DatabaseMySqlConnection;
+namespace Raylin666\Database\Connectors;
 
 /**
- * Class MysqlConnection
- * @package Raylin666\Database\Connections
+ * Class SqlServerConnection
+ * @package Raylin666\Database\Connectors
  */
-class MysqlConnection extends DatabaseMySqlConnection
+class SqlServerConnection extends \Illuminate\Database\SqlServerConnection
 {
 
 }

@@ -9,21 +9,21 @@
 // | Author: kaka梦很美 <1099013371@qq.com>
 // +----------------------------------------------------------------------
 
-namespace Raylin666\Database;
+namespace Raylin666\Database\Pdo;
 
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\DatabaseTransactionsManager;
 use Illuminate\Database\Query\Processors\Processor;
-use Raylin666\Database\Connections\MysqlConnection;
-use Raylin666\Database\Connections\PostgresConnection;
-use Raylin666\Database\Connections\SQLiteConnection;
-use Raylin666\Database\Connections\SqlServerConnection;
+use Raylin666\Database\Connectors\MysqlConnection;
+use Raylin666\Database\Connectors\PostgresConnection;
+use Raylin666\Database\Connectors\SQLiteConnection;
+use Raylin666\Database\Connectors\SqlServerConnection;
 use Raylin666\Database\Exception\DatabaseConnectionException;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherInterface;
 
 /**
  * Class Connection
- * @package Raylin666\Database
+ * @package Raylin666\Database\Pdo
  */
 class Connection
 {
@@ -60,11 +60,11 @@ class Connection
     {
         $this->PDO = $PDO;
 
-        $this->dispatcher = $this->PDO->getConfig()->getDispatcher();
+        $this->dispatcher = $PDO->getConfig()->getDispatcher();
 
-        $this->transactionsManager = new DatabaseTransactionsManager();
+        $this->transactionsManager = make(DatabaseTransactionsManager::class);
 
-        $this->processor = new Processor();
+        $this->processor = make(Processor::class);
     }
 
     /**
@@ -74,27 +74,37 @@ class Connection
     {
         if (! $this->connection instanceof ConnectionInterface) {
             switch ($this->PDO->getConfig()->getDriver()) {
-                case Config::DRIVER_MYSQL:
+                case DbConfig::DRIVER_MYSQL:
                     $connector = MysqlConnection::class;
                     break;
-                case Config::DRIVER_PGSQL:
+                case DbConfig::DRIVER_PGSQL:
                     $connector = PostgresConnection::class;
                     break;
-                case Config::DRIVER_SQLSRV:
+                case DbConfig::DRIVER_SQLSRV:
                     $connector = SqlServerConnection::class;
                     break;
-                case Config::DRIVER_SQLITE:
+                case DbConfig::DRIVER_SQLITE:
                     $connector = SQLiteConnection::class;
                     break;
                 default:
-                    throw new DatabaseConnectionException($this->PDO->getConfig()->getDriver() . ' driver is not supported or does not exist.');
+                    throw new DatabaseConnectionException(sprintf('%s driver is not supported or does not exist.', $this->PDO->getConfig()->getDriver()));
             }
+            
+            $connection = $this->createConnectorGetConnection($connector);
+            
+            /** @var \Illuminate\Database\Connection $connection */
+            // 设置连接器
+            $connection->setReconnector(function () use ($connection) {
+                return $connection;
+            });
+            // 设置事件发布器
+            $connection->setEventDispatcher($this->dispatcher);
+            // 设置事务管理器
+            $connection->setTransactionManager($this->transactionsManager);
+            // 设置连接使用的查询后处理器
+            $connection->setPostProcessor($this->processor);
 
-            $this->connection = $this
-                ->createConnectorGetConnection($connector)
-                ->setEventDispatcher($this->dispatcher)
-                ->setTransactionManager($this->transactionsManager)
-                ->setPostProcessor($this->processor);
+            $this->connection = $connection;
         }
 
         return $this;
@@ -117,7 +127,7 @@ class Connection
     }
 
     /**
-     * @return ConnectionInterface|MysqlConnection|PostgresConnection|SQLiteConnection|SqlServerConnection
+     * @return ConnectionInterface|\Illuminate\Database\Connection|null
      */
     public function getConnection(): ?ConnectionInterface
     {
@@ -142,21 +152,15 @@ class Connection
 
     /**
      * @param $connector
-     * @return ConnectionInterface|MysqlConnection|PostgresConnection|SQLiteConnection|SqlServerConnection
+     * @return ConnectionInterface
      */
     protected function createConnectorGetConnection($connector): ConnectionInterface
     {
-        $connection = new $connector(
+        return new $connector(
             $this->PDO->getConnection(),
             $this->PDO->getConfig()->getDbname(),
-            $this->PDO->getConfig()->getTablePrefix()
+            $this->PDO->getConfig()->getTablePrefix(),
+            $this->PDO->getConfig()->getOptions()
         );
-
-        /** @var \Illuminate\Database\Connection $connection */
-        $connection->setReconnector(function () use ($connection) {
-            return $connection;
-        });
-
-        return $connection;
     }
 }
